@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>皮瓜软件站</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Dancing+Script:wght@700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
-    <!-- 增加中文字体备选 -->
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -14,7 +13,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* 移除移动端点击高亮 */
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -23,7 +22,7 @@
             position: relative;
             background: #050514;
             overflow-x: hidden;
-            padding: 0 10px 60px; /* 增加左右内边距，避免内容贴边 */
+            padding: 0 10px 60px;
         }
 
         #starry-sky {
@@ -137,10 +136,10 @@
 
         .site-title {
             color: white;
-            font-size: clamp(1.5rem, 8vw, 2.5rem); /* 增加移动端字体响应范围 */
+            font-size: clamp(1.5rem, 8vw, 2.5rem);
             font-weight: bold;
             text-align: center;
-            margin: 20px 0 30px; /* 调整间距 */
+            margin: 20px 0 30px;
             font-family: 'Orbitron', sans-serif;
             opacity: 0;
             animation: 
@@ -149,21 +148,20 @@
             position: relative;
             z-index: 10;
             white-space: nowrap;
-            padding: 0 10px; /* 防止边缘被截断 */
+            padding: 0 10px;
         }
 
         .site-title::before,
         .site-title::after {
             content: "";
             display: inline-block;
-            width: clamp(20px, 6vw, 30px); /* 响应式宽度 */
+            width: clamp(20px, 6vw, 30px);
             height: 2px;
             background: linear-gradient(90deg, transparent, #9d4edd, transparent);
             margin: 0 5px;
             vertical-align: middle;
         }
 
-        /* 按钮容器样式 */
         .button-container {
             width: 100%;
             max-width: 400px;
@@ -191,7 +189,6 @@
             }
         }
 
-        /* 数字序号动画 */
         @keyframes numberFadeIn {
             0% {
                 opacity: 0;
@@ -210,7 +207,6 @@
             }
         }
 
-        /* 数字脉动动画 */
         @keyframes numberPulse {
             0%, 100% {
                 text-shadow: 0 0 5px rgba(157, 78, 221, 0.8), 
@@ -230,15 +226,14 @@
             display: flex;
             justify-content: center;
             perspective: 1000px;
-            margin-bottom: 18px; /* 减少间距，适合小屏幕 */
+            margin-bottom: 18px;
         }
 
-        /* 按钮序号样式 - 移动端优化 */
         .btn-number {
             position: absolute;
-            left: clamp(12px, 5vw, 40px); /* 响应式左侧位置 */
+            left: clamp(12px, 5vw, 40px);
             top: 22%;
-            width: clamp(34px, 10vw, 40px); /* 响应式大小 */
+            width: clamp(34px, 10vw, 40px);
             height: clamp(34px, 10vw, 40px);
             display: flex;
             align-items: center;
@@ -248,7 +243,7 @@
             border-radius: 50%;
             color: #f0e6ff;
             font-weight: bold;
-            font-size: clamp(1rem, 3vw, 1.2rem); /* 响应式字体 */
+            font-size: clamp(1rem, 3vw, 1.2rem);
             font-family: 'Orbitron', sans-serif;
             z-index: 20;
             opacity: 0;
@@ -257,14 +252,13 @@
             transform: translateY(-53%);
         }
 
-        /* 按钮样式 - 移动端优化 */
         .install-btn {
             padding: clamp(14px, 5vw, 18px) clamp(20px, 15vw, 80px) clamp(14px, 5vw, 18px) clamp(50px, 18vw, 70px);
             background: linear-gradient(145deg, rgba(15, 15, 35, 0.8), rgba(0, 0, 0, 0.6));
             color: white;
             border: 2px solid #9d4edd;
             border-radius: 16px;
-            font-size: clamp(1.2rem, 6vw, 28px); /* 响应式字体大小 */
+            font-size: clamp(1.2rem, 6vw, 28px);
             font-weight: bold;
             cursor: pointer;
             z-index: 10;
@@ -272,14 +266,13 @@
             width: 100%;
             max-width: 350px;
             text-align: center;
-            /* 为移动端增加备选字体，优先使用中文字体 */
             font-family: 'Dancing Script', 'Ma Shan Zheng', cursive, sans-serif;
             transition: all 0.3s ease;
             opacity: 0;
             position: relative;
             overflow: hidden;
             transform-style: preserve-3d;
-            touch-action: manipulation; /* 优化触摸体验 */
+            touch-action: manipulation;
         }
 
         .install-btn i {
@@ -298,7 +291,7 @@
             transform: translateY(-2px) scale(1.02) rotateX(5deg);
             border-color: #b76ef7;
             color: #f0e6ff;
-            outline: none; /* 移除焦点轮廓 */
+            outline: none;
         }
 
         .btn-wrapper:hover .btn-number, .btn-wrapper:focus-within .btn-number {
@@ -381,7 +374,6 @@
             z-index: 5;
         }
 
-        /* 提示框样式 - 移动端优化 */
         .toast {
             position: fixed;
             top: 20px;
@@ -396,8 +388,8 @@
             z-index: 100;
             opacity: 0;
             transition: all 0.3s ease;
-            font-size: clamp(0.9rem, 3vw, 1rem); /* 响应式字体 */
-            max-width: 90%; /* 限制最大宽度 */
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            max-width: 90%;
             text-align: center;
         }
 
@@ -406,7 +398,6 @@
             opacity: 1;
         }
 
-        /* 针对小屏手机的额外优化 */
         @media (max-width: 360px) {
             .site-title {
                 margin: 15px 0 20px;
@@ -418,77 +409,231 @@
             
             .install-btn {
                 padding-left: 45px;
-                /* 小屏手机使用更适合的字体大小 */
                 font-size: clamp(1.1rem, 7vw, 24px);
             }
+        }
+
+        /* 新增：浏览器窗口模拟样式 */
+        .browser-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 90%;
+            max-width: 800px;
+            height: 80vh;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
+            z-index: 1000;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .browser-window.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .browser-header {
+            height: 40px;
+            background-color: #f0f0f0;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .browser-buttons {
+            display: flex;
+            gap: 8px;
+            margin-right: 15px;
+        }
+
+        .browser-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .browser-btn.close {
+            background-color: #ff5f58;
+        }
+
+        .browser-btn.minimize {
+            background-color: #ffbd2e;
+        }
+
+        .browser-btn.maximize {
+            background-color: #28c840;
+        }
+
+        .browser-address {
+            flex: 1;
+            height: 26px;
+            background-color: #fff;
+            border-radius: 13px;
+            padding: 0 12px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+
+        .browser-address i {
+            margin-right: 8px;
+            color: #999;
+            font-size: 10px;
+        }
+
+        .browser-content {
+            width: 100%;
+            height: calc(100% - 40px);
+            background-color: #f9f9f9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .browser-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(157, 78, 221, 0.2);
+            border-radius: 50%;
+            border-top-color: #9d4edd;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .browser-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        .browser-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .browser-backdrop.active {
+            opacity: 1;
+            pointer-events: all;
         }
     </style>
 </head>
 <body>
     <div id="starry-sky"></div>
     <div class="footer-decoration"></div>
-    <!-- 提示框元素 -->
     <div class="toast">此按钮无效果</div>
+
+    <!-- 新增：浏览器窗口模拟元素 -->
+    <div class="browser-backdrop"></div>
+    <div class="browser-window">
+        <div class="browser-header">
+            <div class="browser-buttons">
+                <div class="browser-btn close"></div>
+                <div class="browser-btn minimize"></div>
+                <div class="browser-btn maximize"></div>
+            </div>
+            <div class="browser-address">
+                <i class="fas fa-globe"></i>
+                <span class="url-display">加载中...</span>
+            </div>
+        </div>
+        <div class="browser-content">
+            <div class="browser-loading">
+                <div class="loading-spinner"></div>
+                <p>正在加载...</p>
+            </div>
+            <iframe class="browser-iframe"></iframe>
+        </div>
+    </div>
 
     <h1 class="site-title">皮瓜软件站</h1>
     
     <div class="button-container">
-        <!-- 按钮1 -->
         <div class="btn-wrapper">
             <span class="btn-number">1</span>
             <a href="https://easylink.cc/ojvp99" class="install-btn"><i class="fas fa-download"></i>皮瓜软件站1.0</a>
         </div>
         
-        <!-- 按钮2 -->
         <div class="btn-wrapper">
             <span class="btn-number">2</span>
             <a href="https://easylink.cc/sst4iw" class="install-btn"><i class="fas fa-download"></i>皮瓜星空开罗2.0</a>
         </div>
         
-        <!-- 按钮3 -->
         <div class="btn-wrapper">
             <span class="btn-number">3</span>
             <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
         </div>
         
-        <!-- 按钮4 -->
         <div class="btn-wrapper">
             <span class="btn-number">4</span>
             <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
         </div>
         
-        <!-- 按钮5 -->
         <div class="btn-wrapper">
             <span class="btn-number">5</span>
             <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
         </div>
         
-        <!-- 按钮6 -->
         <div class="btn-wrapper">
             <span class="btn-number">6</span>
             <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
         </div>
         
-        <!-- 按钮7 -->
         <div class="btn-wrapper">
             <span class="btn-number">7</span>
             <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
         </div>
         
-        <!-- 按钮8 -->
         <div class="btn-wrapper">
             <span class="btn-number">8</span>
             <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
         </div>
 
-        <!-- 按钮9 -->
         <div class="btn-wrapper">
             <span class="btn-number">9</span>
             <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
         </div>
+
+        <div class="btn-wrapper">
+            <span class="btn-number">10</span>
+            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
+        </div>
     </div>
 
-    <!-- 点击音效元素 -->
     <audio id="clickSound" preload="auto">
         <source src="http://share.sunjiada.cn/data/music_23739392.mp3" type="audio/mpeg">
     </audio>
@@ -496,16 +641,23 @@
     <script>
         // 星空背景逻辑
         const sky = document.getElementById('starry-sky');
-        const starCount = window.innerWidth < 768 ? 100 : 200; // 移动端减少星星数量，优化性能
+        const starCount = window.innerWidth < 768 ? 100 : 200;
         let meteorInterval;
         const toast = document.querySelector('.toast');
         const clickSound = document.getElementById('clickSound');
+
+        // 新增：浏览器窗口元素
+        const browserWindow = document.querySelector('.browser-window');
+        const browserBackdrop = document.querySelector('.browser-backdrop');
+        const browserIframe = document.querySelector('.browser-iframe');
+        const browserLoading = document.querySelector('.browser-loading');
+        const urlDisplay = document.querySelector('.url-display');
+        const closeBtn = document.querySelector('.browser-btn.close');
 
         function createStar() {
             const star = document.createElement('div');
             star.classList.add('star');
             
-            // 移动端使用更小的星星
             const sizeClass = window.innerWidth < 768 
                 ? (Math.random() > 0.8 ? 'medium' : 'small')
                 : (Math.random() > 0.7 ? 'large' : (Math.random() > 0.5 ? 'medium' : 'small'));
@@ -538,7 +690,6 @@
             
             meteor.style.top = `${Math.random() * 30 + 10}%`;
             meteor.style.right = `-${Math.random() * 200 + 100}px`;
-            // 移动端流星动画稍快
             const duration = window.innerWidth < 768 ? Math.random() * 0.8 + 0.7 : Math.random() * 1 + 1;
             meteor.style.animation = `meteor ${duration}s linear forwards`;
             
@@ -550,7 +701,6 @@
         }
 
         function initStars() {
-            // 分批创建星星，避免移动端卡顿
             let created = 0;
             const batchSize = 20;
             const interval = setInterval(() => {
@@ -564,7 +714,6 @@
                 }
             }, 100);
             
-            // 移动端流星出现频率降低
             const meteorDelay = window.innerWidth < 768 ? Math.random() * 20000 + 8000 : Math.random() * 15000 + 5000;
             scheduleMeteor(meteorDelay);
         }
@@ -572,15 +721,12 @@
         function scheduleMeteor(delay) {
             meteorInterval = setTimeout(() => {
                 createMeteor();
-                // 动态调整下次流星出现时间
                 const nextDelay = window.innerWidth < 768 ? Math.random() * 20000 + 8000 : Math.random() * 15000 + 5000;
                 scheduleMeteor(nextDelay);
             }, delay);
         }
 
-        // 优化移动端点击效果
         document.addEventListener('click', (e) => {
-            // 移动端减少点击产生的星星数量
             const clusterSize = window.innerWidth < 768 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 5) + 3;
             
             if (!e.target.classList.contains('install-btn') && !e.target.classList.contains('site-title')) {
@@ -595,12 +741,10 @@
             }
         });
 
-        // 为按钮和序号自动应用动画
         function setupButtonAnimations() {
             const btnWrappers = document.querySelectorAll('.btn-wrapper');
             
             btnWrappers.forEach((wrapper, index) => {
-                // 移动端动画延迟稍短
                 const delay = window.innerWidth < 768 ? 0.3 + (index * 0.15) : 0.5 + (index * 0.2);
                 
                 const button = wrapper.querySelector('.install-btn');
@@ -616,24 +760,20 @@
             });
         }
 
-        // 触摸事件处理，优化移动端体验
         function setupTouchEvents() {
             document.querySelectorAll('.install-btn').forEach(button => {
-                // 触摸开始时的效果
                 button.addEventListener('touchstart', function(e) {
                     this.style.transform = 'translateY(-2px) scale(1.02) rotateX(5deg)';
                     this.style.boxShadow = '0 0 20px #b76ef7, 0 0 40px rgba(183, 110, 247, 0.7), inset 0 0 15px rgba(183, 110, 247, 0.6)';
                     this.style.borderColor = '#b76ef7';
                 });
                 
-                // 触摸结束时的效果
                 button.addEventListener('touchend', function(e) {
                     this.style.transform = '';
                     this.style.boxShadow = '';
                     this.style.borderColor = '';
                 });
                 
-                // 触摸取消时的效果
                 button.addEventListener('touchcancel', function(e) {
                     this.style.transform = '';
                     this.style.boxShadow = '';
@@ -642,12 +782,59 @@
             });
         }
 
+        // 新增：打开浏览器窗口函数
+        function openBrowserWindow(url) {
+            // 显示浏览器窗口和背景
+            browserWindow.classList.add('active');
+            browserBackdrop.classList.add('active');
+            
+            // 更新地址栏显示
+            urlDisplay.textContent = url;
+            
+            // 显示加载状态
+            browserLoading.style.display = 'flex';
+            browserIframe.style.display = 'none';
+            
+            // 设置iframe地址
+            browserIframe.src = url;
+            
+            // 监听iframe加载完成
+            browserIframe.onload = function() {
+                // 隐藏加载状态，显示内容
+                setTimeout(() => {
+                    browserLoading.style.display = 'none';
+                    browserIframe.style.display = 'block';
+                }, 500); // 稍微延迟，让用户看到加载完成的过渡
+            };
+            
+            // 处理加载错误
+            browserIframe.onerror = function() {
+                browserLoading.innerHTML = '<p>加载失败，请重试</p>';
+            };
+        }
+
+        // 新增：关闭浏览器窗口函数
+        function closeBrowserWindow() {
+            browserWindow.classList.remove('active');
+            browserBackdrop.classList.remove('active');
+            // 重置iframe和加载状态
+            setTimeout(() => {
+                browserIframe.src = '';
+                browserLoading.innerHTML = '<div class="loading-spinner"></div><p>正在加载...</p>';
+                browserLoading.style.display = 'flex';
+                browserIframe.style.display = 'none';
+            }, 300);
+        }
+
+        // 新增：绑定关闭按钮事件
+        closeBtn.addEventListener('click', closeBrowserWindow);
+        browserBackdrop.addEventListener('click', closeBrowserWindow);
+
         window.addEventListener('load', () => {
             initStars();
             setupButtonAnimations();
-            setupTouchEvents(); // 初始化触摸事件
+            setupTouchEvents();
             
-            // 预加载音效，提升移动端体验
             if (clickSound) {
                 clickSound.load();
             }
@@ -657,31 +844,30 @@
             if (meteorInterval) clearTimeout(meteorInterval);
         });
 
-        // 按钮点击处理逻辑
+        // 修改：按钮点击处理逻辑
         document.querySelectorAll('.install-btn').forEach(button => {
             button.addEventListener('click', function(e) {
+                e.preventDefault(); // 阻止默认跳转行为
                 const buttonText = this.textContent.trim();
+                const url = this.getAttribute('href');
                 
-                // 播放点击音效
                 playClickSound();
+                createRipples(this, e);
                 
                 if (buttonText === '安装包') {
-                    e.preventDefault();
                     showToast('此按钮无效果');
-                    createRipples(this, e);
-                } else {
-                    createRipples(this, e);
+                } else if (url) {
+                    // 打开模拟浏览器窗口并加载目标URL
+                    openBrowserWindow(url);
                 }
             });
         });
 
-        // 播放点击音效函数
         function playClickSound() {
             if (!clickSound) return;
             
             try {
                 clickSound.currentTime = 0;
-                // 移动端确保用户交互后能播放音效
                 clickSound.play().catch(error => {
                     console.log('音效播放失败:', error);
                 });
@@ -690,9 +876,7 @@
             }
         }
 
-        // 创建波纹效果
         function createRipples(button, event) {
-            // 移动端减少波纹数量，优化性能
             const rippleCount = window.innerWidth < 768 ? 1 : 2;
             
             for (let i = 0; i < rippleCount; i++) {
@@ -703,7 +887,6 @@
                 const sizeMultiplier = 1 - (i * 0.2);
                 
                 const rect = button.getBoundingClientRect();
-                // 处理触摸事件的坐标
                 const x = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
                 const y = event.touches ? event.touches[0].clientY - rect.top : event.clientY - rect.top;
                 const size = Math.max(rect.width, rect.height) * sizeMultiplier;
@@ -721,7 +904,6 @@
             }
         }
 
-        // 显示提示框
         function showToast(message) {
             toast.textContent = message;
             toast.classList.add('show');
