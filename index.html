@@ -2,1148 +2,216 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>皮瓜软件站</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Dancing+Script:wght@700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* 基础样式重置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加载中...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 配置Tailwind自定义颜色 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neon: {
+                            purple: '#9D4EDD',
+                            pink: '#C77DFF',
+                            violet: '#7E22CE',
+                            lavender: '#B453CD',
+                            dark: '#0F172A'
+                        }
+                    }
+                }
+            }
         }
-
-        body {
-            height: 100%;
-            min-height: 100vh;
-            position: relative;
-            background: #050514;
-            overflow-x: hidden;
-            padding: 0 10px 60px;
-        }
-
-        #starry-sky {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at top right, rgba(157, 78, 221, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at bottom left, rgba(78, 121, 221, 0.1) 0%, transparent 30%),
-                #050514;
-            z-index: -1;
-        }
-
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle linear infinite;
-        }
-
-        .star.small {
-            width: 1px;
-            height: 1px;
-            opacity: 0.7;
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .glow-purple {
+                box-shadow: 0 0 15px rgba(157, 78, 221, 0.6),
+                            0 0 30px rgba(157, 78, 221, 0.4),
+                            0 0 45px rgba(157, 78, 221, 0.2);
+            }
+            .gradient-animate {
+                background-size: 200% 200%;
+                animation: gradientShift 3s ease infinite;
+            }
         }
         
-        .star.medium {
-            width: 2px;
-            height: 2px;
-            opacity: 0.8;
-        }
-        
-        .star.large {
-            width: 3px;
-            height: 3px;
-            opacity: 0.9;
-        }
-
-        @keyframes twinkle {
-            0%, 100% {
-                opacity: 0.5;
-                transform: scale(0.8);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-        }
-
-        @keyframes move {
-            0% {
-                transform: translateX(0) scale(var(--scale));
-            }
-            100% {
-                transform: translateX(-100vw) scale(var(--scale));
-            }
-        }
-
-        .meteor {
-            position: absolute;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-            width: 150px;
-            height: 1px;
-            transform-origin: right center;
-            z-index: 1;
-            opacity: 0;
-        }
-
-        @keyframes meteor {
-            0% {
-                transform: rotate(-30deg) translateX(0);
-                opacity: 0;
-            }
-            20% {
-                opacity: 1;
-            }
-            80% {
-                opacity: 1;
-            }
-            100% {
-                transform: rotate(-30deg) translateX(-1000px);
-                opacity: 0;
-            }
-        }
-
-        @keyframes titleFadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px) scale(0.9);
-                text-shadow: 0 0 5px #fff;
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                text-shadow: 0 0 10px #fff, 0 0 20px #9d4edd, 0 0 30px #9d4edd;
-            }
-        }
-
-        @keyframes titlePulse {
-            0%, 100% {
-                text-shadow: 0 0 10px #fff, 0 0 20px #9d4edd, 0 0 30px #9d4edd;
-                transform: scale(1);
-            }
-            50% {
-                text-shadow: 0 0 15px #fff, 0 0 30px #b76ef7, 0 0 45px #b76ef7, 0 0 60px #b76ef7;
-                transform: scale(1.03);
-            }
-        }
-
-        .site-title {
-            color: white;
-            font-size: clamp(1.5rem, 8vw, 2.5rem);
-            font-weight: bold;
-            text-align: center;
-            margin: 20px 0 30px;
-            font-family: 'Orbitron', sans-serif;
-            opacity: 0;
-            animation: 
-                titleFadeIn 1.5s ease forwards 0.3s,
-                titlePulse 3s ease-in-out infinite 1.8s;
-            position: relative;
-            z-index: 10;
-            white-space: nowrap;
-            padding: 0 10px;
-        }
-
-        .site-title::before,
-        .site-title::after {
-            content: "";
-            display: inline-block;
-            width: clamp(20px, 6vw, 30px);
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #9d4edd, transparent);
-            margin: 0 5px;
-            vertical-align: middle;
-        }
-
-        .button-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 0 10px 40px;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.8) translateY(10px);
-                box-shadow: 0 0 5px #9d4edd;
-            }
-            50% {
-                opacity: 0.6;
-                transform: scale(1.05) translateY(-2px);
-                box-shadow: 0 0 30px #9d4edd;
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-                box-shadow: 0 0 15px #9d4edd, 
-                            0 0 30px rgba(157, 78, 221, 0.6),
-                            inset 0 0 10px rgba(157, 78, 221, 0.5);
-            }
-        }
-
-        @keyframes numberFadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(10px) scale(0.8);
-                text-shadow: none;
-            }
-            50% {
-                opacity: 0.6;
-                transform: translateY(-2px) scale(1.1);
-                text-shadow: 0 0 15px rgba(157, 78, 221, 0.8);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                text-shadow: 0 0 5px rgba(157, 78, 221, 0.8);
-            }
-        }
-
-        @keyframes numberPulse {
-            0%, 100% {
-                text-shadow: 0 0 5px rgba(157, 78, 221, 0.8), 
-                             0 0 10px rgba(157, 78, 221, 0.6);
-                transform: translateY(-53%) scale(1);
-            }
-            50% {
-                text-shadow: 0 0 10px rgba(183, 110, 247, 0.9), 
-                             0 0 20px rgba(183, 110, 247, 0.7),
-                             0 0 30px rgba(183, 110, 247, 0.5);
-                transform: translateY(-53%) scale(1.05);
-            }
-        }
-
-        .btn-wrapper {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            perspective: 1000px;
-            margin-bottom: 18px;
-        }
-
-        .btn-number {
-            position: absolute;
-            left: clamp(12px, 5vw, 40px);
-            top: 22%;
-            width: clamp(34px, 10vw, 40px);
-            height: clamp(34px, 10vw, 40px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle, rgba(157, 78, 221, 0.3) 0%, rgba(15, 15, 35, 0.6) 70%);
-            border: 1px solid rgba(157, 78, 221, 0.5);
-            border-radius: 50%;
-            color: #f0e6ff;
-            font-weight: bold;
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            font-family: 'Orbitron', sans-serif;
-            z-index: 20;
-            opacity: 0;
-            box-shadow: 0 0 5px rgba(157, 78, 221, 0.5),
-                       inset 0 0 3px rgba(255, 255, 255, 0.2);
-            transform: translateY(-53%);
-        }
-
-        .install-btn {
-            padding: clamp(14px, 5vw, 18px) clamp(20px, 15vw, 80px) clamp(14px, 5vw, 18px) clamp(50px, 18vw, 70px);
-            background: linear-gradient(145deg, rgba(15, 15, 35, 0.8), rgba(0, 0, 0, 0.6));
-            color: white;
-            border: 2px solid #9d4edd;
-            border-radius: 16px;
-            font-size: clamp(1.2rem, 6vw, 28px);
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 10;
-            text-decoration: none;
-            width: 100%;
-            max-width: 350px;
-            text-align: center;
-            font-family: 'Dancing Script', 'Ma Shan Zheng', cursive, sans-serif;
-            transition: all 0.3s ease;
-            opacity: 0;
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            touch-action: manipulation;
-        }
-
-        .install-btn i {
-            margin-right: 8px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        }
-
-        .btn-number {
-            animation-name: numberFadeIn !important;
-        }
-
-        .install-btn:hover, .install-btn:focus {
-            box-shadow: 0 0 20px #b76ef7, 
-                        0 0 40px rgba(183, 110, 247, 0.7),
-                        inset 0 0 15px rgba(183, 110, 247, 0.6);
-            transform: translateY(-2px) scale(1.02) rotateX(5deg);
-            border-color: #b76ef7;
-            color: #f0e6ff;
-            outline: none;
-        }
-
-        .btn-wrapper:hover .btn-number, .btn-wrapper:focus-within .btn-number {
-            background: radial-gradient(circle, rgba(183, 110, 247, 0.4) 0%, rgba(15, 15, 35, 0.7) 70%);
-            border-color: rgba(183, 110, 247, 0.7);
-            color: white;
-            box-shadow: 0 0 10px rgba(183, 110, 247, 0.7),
-                       inset 0 0 3px rgba(255, 255, 255, 0.3);
-        }
-
-        .install-btn:active {
-            animation: candyEffect 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes candyEffect {
-            0% {
-                transform: scale(1.02) rotateX(5deg);
-                box-shadow: 0 0 20px #b76ef7, 
-                            0 0 40px rgba(183, 110, 247, 0.7),
-                            inset 0 0 15px rgba(183, 110, 247, 0.6);
-                border-color: #b76ef7;
-            }
-            30% {
-                transform: scale(0.95, 1.05) rotateX(0);
-                box-shadow: 0 0 10px #9d4edd, 
-                            0 0 20px rgba(157, 78, 221, 0.5),
-                            inset 0 0 20px rgba(157, 78, 221, 0.7);
-                border-color: #8a2be2;
-                color: #d8bfd8;
-            }
-            60% {
-                transform: scale(1.08, 0.95) rotateX(-3deg);
-                box-shadow: 0 0 25px #c98fff, 
-                            0 0 50px rgba(201, 143, 255, 0.8),
-                            inset 0 0 10px rgba(201, 143, 255, 0.6);
-                border-color: #c98fff;
-                color: #f8f0ff;
-            }
-            100% {
-                transform: scale(1) rotateX(0);
-                box-shadow: 0 0 15px #9d4edd, 
-                            0 0 30px rgba(157, 78, 221, 0.6),
-                            inset 0 0 10px rgba(157, 78, 221, 0.5);
-                border-color: #9d4edd;
-                color: white;
-            }
-        }
-
-        .install-btn .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(201, 143, 255, 0.6) 0%, rgba(157, 78, 221, 0.2) 70%);
-            transform: scale(0);
-            animation: candyRipple 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            pointer-events: none;
-        }
-
-        @keyframes candyRipple {
-            0% {
-                transform: scale(0);
-                opacity: 1;
-            }
-            70% {
-                transform: scale(5);
-                opacity: 0.4;
-            }
-            100% {
-                transform: scale(6);
-                opacity: 0;
-            }
-        }
-
-        .footer-decoration {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background: linear-gradient(to top, rgba(157, 78, 221, 0.1), transparent);
-            z-index: 5;
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: clamp(8px, 3vw, 12px) clamp(16px, 6vw, 24px);
-            border-radius: 8px;
-            border: 1px solid #9d4edd;
-            box-shadow: 0 0 10px rgba(157, 78, 221, 0.5);
-            z-index: 100;
-            opacity: 0;
-            transition: all 0.3s ease;
-            font-size: clamp(0.9rem, 3vw, 1rem);
-            max-width: 90%;
-            text-align: center;
-        }
-
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        @media (max-width: 360px) {
-            .site-title {
-                margin: 15px 0 20px;
-            }
-            
-            .btn-wrapper {
-                margin-bottom: 15px;
-            }
-            
-            .install-btn {
-                padding-left: 45px;
-                font-size: clamp(1.1rem, 7vw, 24px);
-            }
-        }
-
-        /* 浏览器窗口模拟样式 */
-        .browser-window {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            width: 90%;
-            max-width: 800px;
-            height: 80vh;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
-            z-index: 1000;
-            overflow: hidden;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .browser-window.active {
-            opacity: 1;
-            pointer-events: all;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .browser-header {
-            height: 40px;
-            background-color: #f0f0f0;
-            padding: 0 15px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #e0e0e0;
-            cursor: move; /* 指示可拖动 */
-        }
-
-        .browser-buttons {
-            display: flex;
-            gap: 8px;
-            margin-right: 15px;
-        }
-
-        .browser-btn {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .browser-btn.close {
-            background-color: #ff5f58;
-        }
-
-        .browser-btn.minimize {
-            background-color: #ffbd2e;
-        }
-
-        .browser-btn.maximize {
-            background-color: #28c840;
-        }
-
-        .browser-address {
-            flex: 1;
-            height: 26px;
-            background-color: #fff;
-            border-radius: 13px;
-            padding: 0 12px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            color: #555;
-            border: 1px solid #ddd;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .browser-address i {
-            margin-right: 8px;
-            color: #999;
-            font-size: 10px;
-        }
-
-        .browser-content {
-            width: 100%;
-            height: calc(100% - 40px);
-            background-color: #f9f9f9;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .browser-loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f9f9f9;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(157, 78, 221, 0.2);
-            border-radius: 50%;
-            border-top-color: #9d4edd;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
         @keyframes spin {
+            from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-
-        .browser-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: none;
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.85; }
         }
-
-        .browser-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-
-        .browser-backdrop.active {
-            opacity: 1;
-            pointer-events: all;
+        
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.9); visibility: hidden; }
         }
-
-        /* 关闭按钮样式 - 集成在弹窗内 */
-        .window-controls {
-            display: flex;
-            align-items: center;
-            margin-left: 30px;
+        
+        @keyframes starDrift {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            25% { opacity: 1; }
+            50% { transform: translate(10px, -10px) scale(1.1); opacity: 0.8; }
+            75% { opacity: 1; }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
         }
-
-        .close-button {
-            width: 30px;
-            height: 30px;
-            background-color: rgba(255, 95, 88, 0.8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: none;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-        }
-
-        .close-button:hover {
-            background-color: #ff5f58;
-            transform: scale(1.05);
-        }
-
-        .close-button:active {
-            transform: scale(0.95);
-        }
-
-        /* 手机适配样式 */
-        @media (max-width: 768px) {
-            .browser-window {
-                width: 95%;
-                height: 90vh;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) scale(0.8);
-            }
-            
-            .browser-header {
-                height: 50px;
-            }
-            
-            .browser-content {
-                height: calc(100% - 50px);
-            }
-            
-            .browser-buttons {
-                gap: 10px;
-            }
-            
-            .browser-btn {
-                width: 14px;
-                height: 14px;
-            }
-            
-            .browser-address {
-                height: 30px;
-                font-size: 13px;
-                padding: 0 10px;
-            }
-            
-            .window-controls {
-                margin-left: 10px;
-            }
-            
-            .close-button {
-                width: 32px;
-                height: 32px;
-                font-size: 18px;
-            }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
     </style>
 </head>
-<body>
-    <div id="starry-sky"></div>
-    <div class="footer-decoration"></div>
-    <div class="toast">此按钮无效果</div>
-
-    <!-- 浏览器窗口模拟元素 -->
-    <div class="browser-backdrop"></div>
-    <div class="browser-window">
-        <div class="browser-header" id="draggable-header">
-            <div class="browser-buttons">
-                <div class="browser-btn close"></div>
-                <div class="browser-btn minimize"></div>
-                <div class="browser-btn maximize"></div>
-            </div>
-            <div class="browser-address">
-                <i class="fas fa-globe"></i>
-                <span class="url-display">加载中...</span>
-            </div>
-            <!-- 关闭按钮集成在标题栏内 -->
-            <div class="window-controls">
-                <button class="close-button">×</button>
-            </div>
-        </div>
-        <div class="browser-content">
-            <div class="browser-loading">
-                <div class="loading-spinner"></div>
-                <p>正在加载...</p>
-            </div>
-            <iframe class="browser-iframe"></iframe>
-        </div>
-    </div>
-
-    <h1 class="site-title">皮瓜软件站</h1>
+<body class="bg-neon-dark min-h-screen flex items-center justify-center overflow-hidden relative">
+    <!-- 动态粒子星空背景 -->
+    <div id="particle-container" class="absolute inset-0 z-0"></div>
     
-    <div class="button-container">
-        <div class="btn-wrapper">
-            <span class="btn-number">1</span>
-            <a href="https://easylink.cc/ojvp99" class="install-btn"><i class="fas fa-download"></i>皮瓜软件站1.0</a>
+    <!-- 光晕背景效果 -->
+    <div class="absolute w-[600px] h-[600px] rounded-full bg-neon-purple/15 blur-[120px] -top-[300px] -left-[300px]" style="animation: pulse 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-neon-pink/15 blur-[120px] -bottom-[250px] -right-[250px]" style="animation: pulse 9s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 2s;"></div>
+    
+    <!-- 加载动画容器 -->
+    <div id="loader" class="flex flex-col items-center justify-center relative z-10">
+        <!-- 装饰环 -->
+        <div class="absolute w-[200px] h-[200px] rounded-full border border-neon-purple/20" style="animation: spin 40s linear infinite;"></div>
+        <div class="absolute w-[160px] h-[160px] rounded-full border border-neon-pink/20" style="animation: spin 30s linear infinite reverse;"></div>
+        
+        <!-- 主加载图标 -->
+        <div class="relative w-28 h-28 mb-10" style="animation: float 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;">
+            <div class="absolute inset-0 border-4 border-neon-purple/20 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-t-neon-purple border-r-neon-pink rounded-full gradient-animate" style="animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
+            <div class="absolute inset-[10px] bg-neon-dark/80 rounded-full flex items-center justify-center glow-purple">
+                <i class="fa fa-rocket text-white text-3xl" style="animation: spin 6s linear infinite reverse;"></i>
+            </div>
         </div>
         
-        <div class="btn-wrapper">
-            <span class="btn-number">2</span>
-            <a href="https://easylink.cc/sst4iw" class="install-btn"><i class="fas fa-download"></i>皮瓜星空开罗2.0</a>
+        <!-- 加载文本 -->
+        <div class="text-lg md:text-xl font-medium mb-6 gradient-animate" style="background: linear-gradient(90deg, #9D4EDD, #C77DFF, #7E22CE); background-clip: text; -webkit-background-clip: text; color: transparent;">
+            <span class="inline-block" style="animation: pulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;">正在进入</span>
+            <span class="inline-block ml-2" style="animation: pulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 0.5s;">梦幻空间</span>
         </div>
         
-        <div class="btn-wrapper">
-            <span class="btn-number">3</span>
-            <a href="https://easylink.cc/yfrzc9" class="install-btn"><i class="fas fa-download"></i>花扇魔改双旦</a>
+        <!-- 动态渐变紫色半透明进度条 -->
+        <div class="w-80 md:w-96 h-5 rounded-full border-2 border-neon-purple/70 overflow-hidden glow-purple">
+            <div id="progress-bar" class="h-full opacity-70 gradient-animate w-0 transition-all duration-300 ease-out" 
+                 style="background: linear-gradient(90deg, #9D4EDD, #C77DFF, #7E22CE, #B453CD);"></div>
         </div>
         
-        <div class="btn-wrapper">
-            <span class="btn-number">4</span>
-            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
-        </div>
-        
-        <div class="btn-wrapper">
-            <span class="btn-number">5</span>
-            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
-        </div>
-        
-        <div class="btn-wrapper">
-            <span class="btn-number">6</span>
-            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
-        </div>
-        
-        <div class="btn-wrapper">
-            <span class="btn-number">7</span>
-            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
-        </div>
-        
-        <div class="btn-wrapper">
-            <span class="btn-number">8</span>
-            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
-        </div>
-
-        <div class="btn-wrapper">
-            <span class="btn-number">9</span>
-            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
-        </div>
-
-        <div class="btn-wrapper">
-            <span class="btn-number">10</span>
-            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
-        </div>
+        <!-- 百分比显示 -->
+        <div id="progress-percent" class="mt-4 text-neon-pink/80 font-mono text-lg transition-all duration-300"></div>
     </div>
-
-    <audio id="clickSound" preload="auto">
-        <source src="http://share.sunjiada.cn/data/music_23739392.mp3" type="audio/mpeg">
-    </audio>
 
     <script>
-        // 星空背景逻辑
-        const sky = document.getElementById('starry-sky');
-        const starCount = window.innerWidth < 768 ? 100 : 200;
-        let meteorInterval;
-        const toast = document.querySelector('.toast');
-        const clickSound = document.getElementById('clickSound');
-
-        // 浏览器窗口元素
-        const browserWindow = document.querySelector('.browser-window');
-        const browserBackdrop = document.querySelector('.browser-backdrop');
-        const browserIframe = document.querySelector('.browser-iframe');
-        const browserLoading = document.querySelector('.browser-loading');
-        const urlDisplay = document.querySelector('.url-display');
-        const closeBtn = document.querySelector('.browser-btn.close');
-        const closeButton = document.querySelector('.close-button');
-        const draggableHeader = document.getElementById('draggable-header');
-
-        // 拖拽相关变量
-        let isDragging = false;
-        let offsetX, offsetY;
-        const isMobile = window.innerWidth < 768;
-
-        function createStar() {
-            const star = document.createElement('div');
-            star.classList.add('star');
+        // 创建动态粒子星空
+        function createParticles() {
+            const container = document.getElementById('particle-container');
+            const particleCount = 100;
             
-            const sizeClass = window.innerWidth < 768 
-                ? (Math.random() > 0.8 ? 'medium' : 'small')
-                : (Math.random() > 0.7 ? 'large' : (Math.random() > 0.5 ? 'medium' : 'small'));
-            star.classList.add(sizeClass);
-
-            star.style.left = `${Math.random() * 100}vw`;
-            star.style.top = `${Math.random() * 100}vh`;
-
-            const twinkleDuration = sizeClass === 'large' ? Math.random() * 4 + 3 : 
-                                   (sizeClass === 'medium' ? Math.random() * 3 + 2 : 
-                                                             Math.random() * 2 + 1);
-            star.style.animationDuration = `${twinkleDuration}s`;
-
-            const moveDuration = Math.random() * 60 + 30;
-            star.style.animationName = 'twinkle, move';
-            star.style.animationDuration = `${twinkleDuration}s, ${moveDuration}s`;
-
-            star.style.setProperty('--scale', Math.random() * 0.5 + 0.7);
-
-            setTimeout(() => {
-                star.remove();
-            }, moveDuration * 1000);
-
-            return star;
-        }
-
-        function createMeteor() {
-            const meteor = document.createElement('div');
-            meteor.classList.add('meteor');
-            
-            meteor.style.top = `${Math.random() * 30 + 10}%`;
-            meteor.style.right = `-${Math.random() * 200 + 100}px`;
-            const duration = window.innerWidth < 768 ? Math.random() * 0.8 + 0.7 : Math.random() * 1 + 1;
-            meteor.style.animation = `meteor ${duration}s linear forwards`;
-            
-            sky.appendChild(meteor);
-            
-            setTimeout(() => {
-                meteor.remove();
-            }, 2000);
-        }
-
-        function initStars() {
-            let created = 0;
-            const batchSize = 20;
-            const interval = setInterval(() => {
-                const toCreate = Math.min(batchSize, starCount - created);
-                for (let i = 0; i < toCreate; i++) {
-                    sky.appendChild(createStar());
-                    created++;
-                }
-                if (created >= starCount) {
-                    clearInterval(interval);
-                }
-            }, 100);
-            
-            const meteorDelay = window.innerWidth < 768 ? Math.random() * 20000 + 8000 : Math.random() * 15000 + 5000;
-            scheduleMeteor(meteorDelay);
-        }
-
-        function scheduleMeteor(delay) {
-            meteorInterval = setTimeout(() => {
-                createMeteor();
-                const nextDelay = window.innerWidth < 768 ? Math.random() * 20000 + 8000 : Math.random() * 15000 + 5000;
-                scheduleMeteor(nextDelay);
-            }, delay);
-        }
-
-        document.addEventListener('click', (e) => {
-            const clusterSize = window.innerWidth < 768 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 5) + 3;
-            
-            if (!e.target.classList.contains('install-btn') && !e.target.classList.contains('site-title')) {
-                for (let i = 0; i < clusterSize; i++) {
-                    const star = createStar();
-                    const offsetX = (Math.random() - 0.5) * 40;
-                    const offsetY = (Math.random() - 0.5) * 40;
-                    star.style.left = `${e.clientX + offsetX}px`;
-                    star.style.top = `${e.clientY + offsetY}px`;
-                    sky.appendChild(star);
-                }
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                const size = Math.random() * 2.5 + 0.5;
+                const opacity = Math.random() * 0.7 + 0.3;
+                const delay = Math.random() * 6;
+                const duration = Math.random() * 15 + 15;
+                
+                const color = Math.random() > 0.7 ? '#fff' : 'rgba(199, 125, 255, 0.9)';
+                
+                particle.style.cssText = `
+                    position: absolute;
+                    background: ${color};
+                    width: ${size}px;
+                    height: ${size}px;
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${opacity};
+                    animation: starDrift ${duration}s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                    animation-delay: ${delay}s;
+                    z-index: 0;
+                    pointer-events: none;
+                `;
+                
+                container.appendChild(particle);
             }
-        });
-
-        function setupButtonAnimations() {
-            const btnWrappers = document.querySelectorAll('.btn-wrapper');
-            
-            btnWrappers.forEach((wrapper, index) => {
-                const delay = window.innerWidth < 768 ? 0.3 + (index * 0.15) : 0.5 + (index * 0.2);
-                
-                const button = wrapper.querySelector('.install-btn');
-                const number = wrapper.querySelector('.btn-number');
-                
-                if (button) {
-                    button.style.animation = `fadeIn 1.5s ease forwards ${delay}s`;
-                }
-                
-                if (number) {
-                    number.style.animation = `numberFadeIn 1.5s ease forwards ${delay}s, numberPulse 3s ease-in-out infinite ${delay + 1.5}s`;
-                }
-            });
         }
-
-        function setupTouchEvents() {
-            document.querySelectorAll('.install-btn').forEach(button => {
-                button.addEventListener('touchstart', function(e) {
-                    this.style.transform = 'translateY(-2px) scale(1.02) rotateX(5deg)';
-                    this.style.boxShadow = '0 0 20px #b76ef7, 0 0 40px rgba(183, 110, 247, 0.7), inset 0 0 15px rgba(183, 110, 247, 0.6)';
-                    this.style.borderColor = '#b76ef7';
-                });
-                
-                button.addEventListener('touchend', function(e) {
-                    this.style.transform = '';
-                    this.style.boxShadow = '';
-                    this.style.borderColor = '';
-                });
-                
-                button.addEventListener('touchcancel', function(e) {
-                    this.style.transform = '';
-                    this.style.boxShadow = '';
-                    this.style.borderColor = '';
-                });
-            });
-
-            // 为浏览器窗口添加触摸拖拽支持
-            let touchStartX, touchStartY;
-            let initialX, initialY;
-            
-            draggableHeader.addEventListener('touchstart', (e) => {
-                // 移动端不允许拖拽或点击了关闭按钮则不启动拖拽
-                if (isMobile || e.target.closest('.close-button') || e.target.closest('.browser-btn')) {
-                    return;
-                }
-                
-                isDragging = true;
-                const rect = browserWindow.getBoundingClientRect();
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-                initialX = rect.left;
-                initialY = rect.top;
-                
-                draggableHeader.style.cursor = 'grabbing';
-                browserWindow.style.transition = 'none';
-            });
-            
-            document.addEventListener('touchmove', (e) => {
-                if (!isDragging || isMobile) return;
-                
-                e.preventDefault(); // 防止页面滚动
-                const dx = e.touches[0].clientX - touchStartX;
-                const dy = e.touches[0].clientY - touchStartY;
-                
-                const x = initialX + dx;
-                const y = initialY + dy;
-                
-                // 限制窗口在可视区域内
-                const windowWidth = browserWindow.offsetWidth;
-                const windowHeight = browserWindow.offsetHeight;
-                const maxX = window.innerWidth - windowWidth;
-                const maxY = window.innerHeight - windowHeight;
-                
-                const constrainedX = Math.max(0, Math.min(x, maxX));
-                const constrainedY = Math.max(0, Math.min(y, maxY));
-                
-                browserWindow.style.left = `${constrainedX}px`;
-                browserWindow.style.top = `${constrainedY}px`;
-                browserWindow.style.transform = 'scale(1)';
-            }, { passive: false });
-            
-            document.addEventListener('touchend', () => {
-                if (isDragging) {
-                    isDragging = false;
-                    draggableHeader.style.cursor = 'move';
-                    browserWindow.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                }
-            });
-        }
-
-        // 打开浏览器窗口函数
-        function openBrowserWindow(url) {
-            // 显示浏览器窗口和背景
-            browserWindow.classList.add('active');
-            browserBackdrop.classList.add('active');
-            
-            // 更新地址栏显示，长URL截断处理
-            if (url.length > 30) {
-                urlDisplay.textContent = url.substring(0, 30) + '...';
+        
+        // 初始化粒子星空
+        createParticles();
+        
+        // 进度条动画控制
+        let progress = 0;
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const loader = document.getElementById('loader');
+        
+        // 初始状态设置
+        progressPercent.textContent = '0%';
+        
+        // 进度更新函数
+        function updateProgress() {
+            let increment;
+            if (progress < 30) {
+                increment = Math.random() * 5 + 2;
+            } else if (progress < 70) {
+                increment = Math.random() * 8 + 3;
             } else {
-                urlDisplay.textContent = url;
+                increment = Math.random() * 5 + 2;
             }
             
-            // 显示加载状态
-            browserLoading.style.display = 'flex';
-            browserIframe.style.display = 'none';
+            progress += increment;
+            if (progress > 100) progress = 100;
             
-            // 设置iframe地址
-            browserIframe.src = url;
+            // 应用进度
+            progressBar.style.width = `${progress}%`;
             
-            // 监听iframe加载完成
-            browserIframe.onload = function() {
-                // 隐藏加载状态，显示内容
+            // 平滑更新百分比显示
+            const displayPercent = Math.floor(progress);
+            if (progressPercent.textContent !== `${displayPercent}%`) {
+                progressPercent.textContent = `${displayPercent}%`;
+            }
+            
+            // 检查是否完成
+            if (progress < 100) {
+                const nextDelay = progress < 50 ? 100 : 70;
+                setTimeout(updateProgress, nextDelay);
+            } else {
                 setTimeout(() => {
-                    browserLoading.style.display = 'none';
-                    browserIframe.style.display = 'block';
-                }, 500); // 稍微延迟，让用户看到加载完成的过渡
-            };
-            
-            // 处理加载错误
-            browserIframe.onerror = function() {
-                browserLoading.innerHTML = '<p>加载失败，请重试</p>';
-            };
-        }
-
-        // 关闭浏览器窗口函数
-        function closeBrowserWindow() {
-            browserWindow.classList.remove('active');
-            browserBackdrop.classList.remove('active');
-            // 重置iframe和加载状态
-            setTimeout(() => {
-                browserIframe.src = '';
-                browserLoading.innerHTML = '<div class="loading-spinner"></div><p>正在加载...</p>';
-                browserLoading.style.display = 'flex';
-                browserIframe.style.display = 'none';
-                
-                // 重置位置，避免下次打开时位置错乱
-                if (!isDragging) {
-                    browserWindow.style.left = '';
-                    browserWindow.style.top = '';
-                    browserWindow.style.transform = 'translate(-50%, -50%) scale(0.8)';
-                }
-            }, 300);
-        }
-
-        // 拖拽功能实现
-        function setupDragFunctionality() {
-            // 移动端禁用拖拽
-            if (isMobile) {
-                draggableHeader.style.cursor = 'default';
-                return;
-            }
-            
-            // 鼠标按下时开始拖拽
-            draggableHeader.addEventListener('mousedown', (e) => {
-                // 如果点击的是关闭按钮，不启动拖拽
-                if (e.target.closest('.close-button') || e.target.closest('.browser-btn')) {
-                    return;
-                }
-                
-                isDragging = true;
-                const rect = browserWindow.getBoundingClientRect();
-                offsetX = e.clientX - rect.left;
-                offsetY = e.clientY - rect.top;
-                
-                // 添加拖拽时的样式
-                draggableHeader.style.cursor = 'grabbing';
-                browserWindow.style.transition = 'none'; // 拖拽时禁用过渡动画
-            });
-
-            // 鼠标移动时更新位置
-            document.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                
-                const x = e.clientX - offsetX;
-                const y = e.clientY - offsetY;
-                
-                // 限制窗口在可视区域内
-                const windowWidth = browserWindow.offsetWidth;
-                const windowHeight = browserWindow.offsetHeight;
-                const maxX = window.innerWidth - windowWidth;
-                const maxY = window.innerHeight - windowHeight;
-                
-                const constrainedX = Math.max(0, Math.min(x, maxX));
-                const constrainedY = Math.max(0, Math.min(y, maxY));
-                
-                browserWindow.style.left = `${constrainedX}px`;
-                browserWindow.style.top = `${constrainedY}px`;
-                browserWindow.style.transform = 'scale(1)'; // 移除居中的transform
-            });
-
-            // 鼠标释放时结束拖拽
-            document.addEventListener('mouseup', () => {
-                if (isDragging) {
-                    isDragging = false;
-                    draggableHeader.style.cursor = 'move';
-                    browserWindow.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'; // 恢复过渡动画
-                }
-            });
-
-            // 鼠标离开窗口时结束拖拽
-            document.addEventListener('mouseleave', () => {
-                if (isDragging) {
-                    isDragging = false;
-                    draggableHeader.style.cursor = 'move';
-                    browserWindow.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'; // 恢复过渡动画
-                }
-            });
-        }
-
-        // 绑定关闭按钮事件
-        closeBtn.addEventListener('click', closeBrowserWindow);
-        browserBackdrop.addEventListener('click', closeBrowserWindow);
-        closeButton.addEventListener('click', closeBrowserWindow);
-
-        // 窗口大小变化时重新调整弹窗
-        window.addEventListener('resize', () => {
-            if (!browserWindow.classList.contains('active')) {
-                // 非活跃状态时重置位置
-                browserWindow.style.left = '';
-                browserWindow.style.top = '';
-                browserWindow.style.transform = 'translate(-50%, -50%) scale(0.8)';
-            }
-        });
-
-        window.addEventListener('load', () => {
-            initStars();
-            setupButtonAnimations();
-            setupTouchEvents();
-            setupDragFunctionality(); // 初始化拖拽功能
-            
-            if (clickSound) {
-                clickSound.load();
-            }
-        });
-
-        window.addEventListener('unload', () => {
-            if (meteorInterval) clearTimeout(meteorInterval);
-        });
-
-        // 按钮点击处理逻辑
-        document.querySelectorAll('.install-btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault(); // 阻止默认跳转行为
-                const buttonText = this.textContent.trim();
-                const url = this.getAttribute('href');
-                
-                playClickSound();
-                createRipples(this, e);
-                
-                if (buttonText === '安装包') {
-                    showToast('此按钮无效果');
-                } else if (url) {
-                    // 打开模拟浏览器窗口并加载目标URL
-                    openBrowserWindow(url);
-                }
-            });
-        });
-
-        function playClickSound() {
-            if (!clickSound) return;
-            
-            try {
-                clickSound.currentTime = 0;
-                clickSound.play().catch(error => {
-                    console.log('音效播放失败:', error);
-                });
-            } catch (error) {
-                console.log('音效播放错误:', error);
+                    loader.style.animation = 'fadeOut 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+                    
+                    setTimeout(() => {
+                        detectDeviceAndRedirect();
+                    }, 800);
+                }, 200);
             }
         }
-
-        function createRipples(button, event) {
-            const rippleCount = window.innerWidth < 768 ? 1 : 2;
+        
+        // 开始进度更新
+        updateProgress();
+        
+        // 设备检测与跳转
+        function detectDeviceAndRedirect() {
+            const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
-            for (let i = 0; i < rippleCount; i++) {
-                const ripple = document.createElement('span');
-                ripple.classList.add('ripple');
-                
-                ripple.style.animationDelay = `${i * 0.1}s`;
-                const sizeMultiplier = 1 - (i * 0.2);
-                
-                const rect = button.getBoundingClientRect();
-                const x = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
-                const y = event.touches ? event.touches[0].clientY - rect.top : event.clientY - rect.top;
-                const size = Math.max(rect.width, rect.height) * sizeMultiplier;
-                
-                ripple.style.left = `${x}px`;
-                ripple.style.top = `${y}px`;
-                ripple.style.width = `${size}px`;
-                ripple.style.height = `${size}px`;
-                
-                button.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 800);
-            }
-        }
-
-        function showToast(message) {
-            toast.textContent = message;
-            toast.classList.add('show');
+            // 替换为您的目标URL
+            const desktopUrl = "https://qiapigua.github.io";
+            const mobileUrl = "https://baidu.com";
             
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            window.location.href = isMobile ? mobileUrl : desktopUrl;
         }
     </script>
 </body>
