@@ -413,7 +413,7 @@
             }
         }
 
-        /* 新增：浏览器窗口模拟样式 */
+        /* 浏览器窗口模拟样式 */
         .browser-window {
             position: fixed;
             top: 50%;
@@ -445,6 +445,7 @@
             display: flex;
             align-items: center;
             border-bottom: 1px solid #e0e0e0;
+            cursor: move; /* 指示可拖动 */
         }
 
         .browser-buttons {
@@ -457,6 +458,7 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
+            cursor: pointer;
         }
 
         .browser-btn.close {
@@ -482,6 +484,9 @@
             align-items: center;
             color: #555;
             border: 1px solid #ddd;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .browser-address i {
@@ -550,6 +555,82 @@
             opacity: 1;
             pointer-events: all;
         }
+
+        /* 关闭按钮样式 - 集成在弹窗内 */
+        .window-controls {
+            display: flex;
+            align-items: center;
+            margin-left: 30px;
+        }
+
+        .close-button {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 95, 88, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-button:hover {
+            background-color: #ff5f58;
+            transform: scale(1.05);
+        }
+
+        .close-button:active {
+            transform: scale(0.95);
+        }
+
+        /* 手机适配样式 */
+        @media (max-width: 768px) {
+            .browser-window {
+                width: 95%;
+                height: 90vh;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            
+            .browser-header {
+                height: 50px;
+            }
+            
+            .browser-content {
+                height: calc(100% - 50px);
+            }
+            
+            .browser-buttons {
+                gap: 10px;
+            }
+            
+            .browser-btn {
+                width: 14px;
+                height: 14px;
+            }
+            
+            .browser-address {
+                height: 30px;
+                font-size: 13px;
+                padding: 0 10px;
+            }
+            
+            .window-controls {
+                margin-left: 10px;
+            }
+            
+            .close-button {
+                width: 32px;
+                height: 32px;
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -557,10 +638,10 @@
     <div class="footer-decoration"></div>
     <div class="toast">此按钮无效果</div>
 
-    <!-- 新增：浏览器窗口模拟元素 -->
+    <!-- 浏览器窗口模拟元素 -->
     <div class="browser-backdrop"></div>
     <div class="browser-window">
-        <div class="browser-header">
+        <div class="browser-header" id="draggable-header">
             <div class="browser-buttons">
                 <div class="browser-btn close"></div>
                 <div class="browser-btn minimize"></div>
@@ -569,6 +650,10 @@
             <div class="browser-address">
                 <i class="fas fa-globe"></i>
                 <span class="url-display">加载中...</span>
+            </div>
+            <!-- 关闭按钮集成在标题栏内 -->
+            <div class="window-controls">
+                <button class="close-button">×</button>
             </div>
         </div>
         <div class="browser-content">
@@ -646,13 +731,20 @@
         const toast = document.querySelector('.toast');
         const clickSound = document.getElementById('clickSound');
 
-        // 新增：浏览器窗口元素
+        // 浏览器窗口元素
         const browserWindow = document.querySelector('.browser-window');
         const browserBackdrop = document.querySelector('.browser-backdrop');
         const browserIframe = document.querySelector('.browser-iframe');
         const browserLoading = document.querySelector('.browser-loading');
         const urlDisplay = document.querySelector('.url-display');
         const closeBtn = document.querySelector('.browser-btn.close');
+        const closeButton = document.querySelector('.close-button');
+        const draggableHeader = document.getElementById('draggable-header');
+
+        // 拖拽相关变量
+        let isDragging = false;
+        let offsetX, offsetY;
+        const isMobile = window.innerWidth < 768;
 
         function createStar() {
             const star = document.createElement('div');
@@ -780,16 +872,73 @@
                     this.style.borderColor = '';
                 });
             });
+
+            // 为浏览器窗口添加触摸拖拽支持
+            let touchStartX, touchStartY;
+            let initialX, initialY;
+            
+            draggableHeader.addEventListener('touchstart', (e) => {
+                // 移动端不允许拖拽或点击了关闭按钮则不启动拖拽
+                if (isMobile || e.target.closest('.close-button') || e.target.closest('.browser-btn')) {
+                    return;
+                }
+                
+                isDragging = true;
+                const rect = browserWindow.getBoundingClientRect();
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                initialX = rect.left;
+                initialY = rect.top;
+                
+                draggableHeader.style.cursor = 'grabbing';
+                browserWindow.style.transition = 'none';
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                if (!isDragging || isMobile) return;
+                
+                e.preventDefault(); // 防止页面滚动
+                const dx = e.touches[0].clientX - touchStartX;
+                const dy = e.touches[0].clientY - touchStartY;
+                
+                const x = initialX + dx;
+                const y = initialY + dy;
+                
+                // 限制窗口在可视区域内
+                const windowWidth = browserWindow.offsetWidth;
+                const windowHeight = browserWindow.offsetHeight;
+                const maxX = window.innerWidth - windowWidth;
+                const maxY = window.innerHeight - windowHeight;
+                
+                const constrainedX = Math.max(0, Math.min(x, maxX));
+                const constrainedY = Math.max(0, Math.min(y, maxY));
+                
+                browserWindow.style.left = `${constrainedX}px`;
+                browserWindow.style.top = `${constrainedY}px`;
+                browserWindow.style.transform = 'scale(1)';
+            }, { passive: false });
+            
+            document.addEventListener('touchend', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    draggableHeader.style.cursor = 'move';
+                    browserWindow.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                }
+            });
         }
 
-        // 新增：打开浏览器窗口函数
+        // 打开浏览器窗口函数
         function openBrowserWindow(url) {
             // 显示浏览器窗口和背景
             browserWindow.classList.add('active');
             browserBackdrop.classList.add('active');
             
-            // 更新地址栏显示
-            urlDisplay.textContent = url;
+            // 更新地址栏显示，长URL截断处理
+            if (url.length > 30) {
+                urlDisplay.textContent = url.substring(0, 30) + '...';
+            } else {
+                urlDisplay.textContent = url;
+            }
             
             // 显示加载状态
             browserLoading.style.display = 'flex';
@@ -813,7 +962,7 @@
             };
         }
 
-        // 新增：关闭浏览器窗口函数
+        // 关闭浏览器窗口函数
         function closeBrowserWindow() {
             browserWindow.classList.remove('active');
             browserBackdrop.classList.remove('active');
@@ -823,17 +972,101 @@
                 browserLoading.innerHTML = '<div class="loading-spinner"></div><p>正在加载...</p>';
                 browserLoading.style.display = 'flex';
                 browserIframe.style.display = 'none';
+                
+                // 重置位置，避免下次打开时位置错乱
+                if (!isDragging) {
+                    browserWindow.style.left = '';
+                    browserWindow.style.top = '';
+                    browserWindow.style.transform = 'translate(-50%, -50%) scale(0.8)';
+                }
             }, 300);
         }
 
-        // 新增：绑定关闭按钮事件
+        // 拖拽功能实现
+        function setupDragFunctionality() {
+            // 移动端禁用拖拽
+            if (isMobile) {
+                draggableHeader.style.cursor = 'default';
+                return;
+            }
+            
+            // 鼠标按下时开始拖拽
+            draggableHeader.addEventListener('mousedown', (e) => {
+                // 如果点击的是关闭按钮，不启动拖拽
+                if (e.target.closest('.close-button') || e.target.closest('.browser-btn')) {
+                    return;
+                }
+                
+                isDragging = true;
+                const rect = browserWindow.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                
+                // 添加拖拽时的样式
+                draggableHeader.style.cursor = 'grabbing';
+                browserWindow.style.transition = 'none'; // 拖拽时禁用过渡动画
+            });
+
+            // 鼠标移动时更新位置
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+                
+                // 限制窗口在可视区域内
+                const windowWidth = browserWindow.offsetWidth;
+                const windowHeight = browserWindow.offsetHeight;
+                const maxX = window.innerWidth - windowWidth;
+                const maxY = window.innerHeight - windowHeight;
+                
+                const constrainedX = Math.max(0, Math.min(x, maxX));
+                const constrainedY = Math.max(0, Math.min(y, maxY));
+                
+                browserWindow.style.left = `${constrainedX}px`;
+                browserWindow.style.top = `${constrainedY}px`;
+                browserWindow.style.transform = 'scale(1)'; // 移除居中的transform
+            });
+
+            // 鼠标释放时结束拖拽
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    draggableHeader.style.cursor = 'move';
+                    browserWindow.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'; // 恢复过渡动画
+                }
+            });
+
+            // 鼠标离开窗口时结束拖拽
+            document.addEventListener('mouseleave', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    draggableHeader.style.cursor = 'move';
+                    browserWindow.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'; // 恢复过渡动画
+                }
+            });
+        }
+
+        // 绑定关闭按钮事件
         closeBtn.addEventListener('click', closeBrowserWindow);
         browserBackdrop.addEventListener('click', closeBrowserWindow);
+        closeButton.addEventListener('click', closeBrowserWindow);
+
+        // 窗口大小变化时重新调整弹窗
+        window.addEventListener('resize', () => {
+            if (!browserWindow.classList.contains('active')) {
+                // 非活跃状态时重置位置
+                browserWindow.style.left = '';
+                browserWindow.style.top = '';
+                browserWindow.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            }
+        });
 
         window.addEventListener('load', () => {
             initStars();
             setupButtonAnimations();
             setupTouchEvents();
+            setupDragFunctionality(); // 初始化拖拽功能
             
             if (clickSound) {
                 clickSound.load();
@@ -844,7 +1077,7 @@
             if (meteorInterval) clearTimeout(meteorInterval);
         });
 
-        // 修改：按钮点击处理逻辑
+        // 按钮点击处理逻辑
         document.querySelectorAll('.install-btn').forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault(); // 阻止默认跳转行为
