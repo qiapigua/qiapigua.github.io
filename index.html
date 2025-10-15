@@ -223,45 +223,6 @@
             }
         }
 
-        /* 按钮待机动画 */
-        @keyframes buttonIdle {
-            0%, 100% {
-                transform: translateY(0) scale(1);
-            }
-            50% {
-                transform: translateY(-2px) scale(1.02);
-            }
-        }
-
-        /* 按钮边框闪烁动画 */
-        @keyframes borderPulse {
-            0%, 100% {
-                box-shadow: 0 0 10px #9d4edd,
-                            0 0 20px rgba(157, 78, 221, 0.5),
-                            inset 0 0 10px rgba(157, 78, 221, 0.5);
-                border-color: #9d4edd;
-            }
-            50% {
-                box-shadow: 0 0 20px #b76ef7,
-                            0 0 40px rgba(183, 110, 247, 0.8),
-                            0 0 60px rgba(183, 110, 247, 0.5),
-                            inset 0 0 12px rgba(183, 110, 247, 0.6);
-                border-color: #b76ef7;
-            }
-        }
-
-        /* 按钮图标待机动画 */
-        @keyframes iconIdle {
-            0%, 100% {
-                transform: translateX(0) rotate(0deg);
-                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-            }
-            50% {
-                transform: translateX(3px) rotate(5deg);
-                text-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 20px #b76ef7;
-            }
-        }
-
         .btn-wrapper {
             position: relative;
             display: flex;
@@ -321,7 +282,6 @@
         .install-btn i {
             margin-right: 8px;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-            animation: iconIdle 4s ease-in-out infinite;
         }
 
         .btn-number {
@@ -329,18 +289,13 @@
         }
 
         .install-btn:hover, .install-btn:focus {
-            box-shadow: 0 0 25px #b76ef7, 
-                        0 0 50px rgba(183, 110, 247, 0.8),
+            box-shadow: 0 0 20px #b76ef7, 
+                        0 0 40px rgba(183, 110, 247, 0.7),
                         inset 0 0 15px rgba(183, 110, 247, 0.6);
             transform: translateY(-2px) scale(1.02) rotateX(5deg);
             border-color: #b76ef7;
             color: #f0e6ff;
             outline: none; /* 移除焦点轮廓 */
-            animation-play-state: paused; /* 悬停时暂停待机动画 */
-        }
-
-        .install-btn:hover i, .install-btn:focus i {
-            animation-play-state: paused; /* 悬停时暂停图标动画 */
         }
 
         .btn-wrapper:hover .btn-number, .btn-wrapper:focus-within .btn-number {
@@ -526,11 +481,6 @@
             <span class="btn-number">9</span>
             <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
         </div>
-        <!-- 按钮10 -->
-        <div class="btn-wrapper">
-            <span class="btn-number">10</span>
-            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
-        </div>
     </div>
 
     <!-- 点击音效元素 -->
@@ -652,12 +602,7 @@
                 const number = wrapper.querySelector('.btn-number');
                 
                 if (button) {
-                    // 添加边框闪烁动画和位置动画
-                    button.style.animation = `
-                        fadeIn 1.5s ease forwards ${delay}s,
-                        buttonIdle 5s ease-in-out infinite ${delay + 1.5}s,
-                        borderPulse 3s ease-in-out infinite ${delay + 1.5}s
-                    `;
+                    button.style.animation = `fadeIn 1.5s ease forwards ${delay}s`;
                 }
                 
                 if (number) {
@@ -674,7 +619,6 @@
                     this.style.transform = 'translateY(-2px) scale(1.02) rotateX(5deg)';
                     this.style.boxShadow = '0 0 20px #b76ef7, 0 0 40px rgba(183, 110, 247, 0.7), inset 0 0 15px rgba(183, 110, 247, 0.6)';
                     this.style.borderColor = '#b76ef7';
-                    this.style.animationPlayState = 'paused'; // 触摸时暂停待机动画
                 });
                 
                 // 触摸结束时的效果
@@ -682,7 +626,6 @@
                     this.style.transform = '';
                     this.style.boxShadow = '';
                     this.style.borderColor = '';
-                    this.style.animationPlayState = 'running'; // 触摸结束恢复动画
                 });
                 
                 // 触摸取消时的效果
@@ -690,7 +633,6 @@
                     this.style.transform = '';
                     this.style.boxShadow = '';
                     this.style.borderColor = '';
-                    this.style.animationPlayState = 'running'; // 触摸取消恢复动画
                 });
             });
         }
@@ -786,3 +728,4 @@
     </script>
 </body>
 </html>
+    
