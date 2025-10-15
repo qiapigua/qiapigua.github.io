@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>皮瓜软件站</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Dancing+Script:wght@700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- 增加中文字体备选 -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* 基础样式重置 */
@@ -270,7 +272,8 @@
             width: 100%;
             max-width: 350px;
             text-align: center;
-            font-family: 'Dancing Script', cursive;
+            /* 为移动端增加备选字体，优先使用中文字体 */
+            font-family: 'Dancing Script', 'Ma Shan Zheng', cursive, sans-serif;
             transition: all 0.3s ease;
             opacity: 0;
             position: relative;
@@ -415,6 +418,8 @@
             
             .install-btn {
                 padding-left: 45px;
+                /* 小屏手机使用更适合的字体大小 */
+                font-size: clamp(1.1rem, 7vw, 24px);
             }
         }
     </style>
@@ -728,4 +733,3 @@
     </script>
 </body>
 </html>
-    
