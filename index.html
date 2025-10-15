@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>皮瓜软件站</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Dancing+Script:wght@700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* 移除移动端点击高亮 */
+        }
+
+        body {
+            height: 100%;
+            min-height: 100vh;
+            position: relative;
+            background: #050514;
+            overflow-x: hidden;
+            padding: 0 10px 60px; /* 增加左右内边距，避免内容贴边 */
+        }
+
+        #starry-sky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at top right, rgba(157, 78, 221, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at bottom left, rgba(78, 121, 221, 0.1) 0%, transparent 30%),
+                #050514;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+
+        .star.small {
+            width: 1px;
+            height: 1px;
+            opacity: 0.7;
+        }
+        
+        .star.medium {
+            width: 2px;
+            height: 2px;
+            opacity: 0.8;
+        }
+        
+        .star.large {
+            width: 3px;
+            height: 3px;
+            opacity: 0.9;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes move {
+            0% {
+                transform: translateX(0) scale(var(--scale));
+            }
+            100% {
+                transform: translateX(-100vw) scale(var(--scale));
+            }
+        }
+
+        .meteor {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            width: 150px;
+            height: 1px;
+            transform-origin: right center;
+            z-index: 1;
+            opacity: 0;
+        }
+
+        @keyframes meteor {
+            0% {
+                transform: rotate(-30deg) translateX(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(-30deg) translateX(-1000px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes titleFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.9);
+                text-shadow: 0 0 5px #fff;
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                text-shadow: 0 0 10px #fff, 0 0 20px #9d4edd, 0 0 30px #9d4edd;
+            }
+        }
+
+        @keyframes titlePulse {
+            0%, 100% {
+                text-shadow: 0 0 10px #fff, 0 0 20px #9d4edd, 0 0 30px #9d4edd;
+                transform: scale(1);
+            }
+            50% {
+                text-shadow: 0 0 15px #fff, 0 0 30px #b76ef7, 0 0 45px #b76ef7, 0 0 60px #b76ef7;
+                transform: scale(1.03);
+            }
+        }
+
+        .site-title {
+            color: white;
+            font-size: clamp(1.5rem, 8vw, 2.5rem); /* 增加移动端字体响应范围 */
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0 30px; /* 调整间距 */
+            font-family: 'Orbitron', sans-serif;
+            opacity: 0;
+            animation: 
+                titleFadeIn 1.5s ease forwards 0.3s,
+                titlePulse 3s ease-in-out infinite 1.8s;
+            position: relative;
+            z-index: 10;
+            white-space: nowrap;
+            padding: 0 10px; /* 防止边缘被截断 */
+        }
+
+        .site-title::before,
+        .site-title::after {
+            content: "";
+            display: inline-block;
+            width: clamp(20px, 6vw, 30px); /* 响应式宽度 */
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #9d4edd, transparent);
+            margin: 0 5px;
+            vertical-align: middle;
+        }
+
+        /* 按钮容器样式 */
+        .button-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 0 10px 40px;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(10px);
+                box-shadow: 0 0 5px #9d4edd;
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.05) translateY(-2px);
+                box-shadow: 0 0 30px #9d4edd;
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                box-shadow: 0 0 15px #9d4edd, 
+                            0 0 30px rgba(157, 78, 221, 0.6),
+                            inset 0 0 10px rgba(157, 78, 221, 0.5);
+            }
+        }
+
+        /* 数字序号动画 */
+        @keyframes numberFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px) scale(0.8);
+                text-shadow: none;
+            }
+            50% {
+                opacity: 0.6;
+                transform: translateY(-2px) scale(1.1);
+                text-shadow: 0 0 15px rgba(157, 78, 221, 0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                text-shadow: 0 0 5px rgba(157, 78, 221, 0.8);
+            }
+        }
+
+        /* 数字脉动动画 */
+        @keyframes numberPulse {
+            0%, 100% {
+                text-shadow: 0 0 5px rgba(157, 78, 221, 0.8), 
+                             0 0 10px rgba(157, 78, 221, 0.6);
+                transform: translateY(-53%) scale(1);
+            }
+            50% {
+                text-shadow: 0 0 10px rgba(183, 110, 247, 0.9), 
+                             0 0 20px rgba(183, 110, 247, 0.7),
+                             0 0 30px rgba(183, 110, 247, 0.5);
+                transform: translateY(-53%) scale(1.05);
+            }
+        }
+
+        .btn-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            perspective: 1000px;
+            margin-bottom: 18px; /* 减少间距，适合小屏幕 */
+        }
+
+        /* 按钮序号样式 - 移动端优化 */
+        .btn-number {
+            position: absolute;
+            left: clamp(12px, 5vw, 40px); /* 响应式左侧位置 */
+            top: 22%;
+            width: clamp(34px, 10vw, 40px); /* 响应式大小 */
+            height: clamp(34px, 10vw, 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.3) 0%, rgba(15, 15, 35, 0.6) 70%);
+            border: 1px solid rgba(157, 78, 221, 0.5);
+            border-radius: 50%;
+            color: #f0e6ff;
+            font-weight: bold;
+            font-size: clamp(1rem, 3vw, 1.2rem); /* 响应式字体 */
+            font-family: 'Orbitron', sans-serif;
+            z-index: 20;
+            opacity: 0;
+            box-shadow: 0 0 5px rgba(157, 78, 221, 0.5),
+                       inset 0 0 3px rgba(255, 255, 255, 0.2);
+            transform: translateY(-53%);
+        }
+
+        /* 按钮样式 - 移动端优化 */
+        .install-btn {
+            padding: clamp(14px, 5vw, 18px) clamp(20px, 15vw, 80px) clamp(14px, 5vw, 18px) clamp(50px, 18vw, 70px);
+            background: linear-gradient(145deg, rgba(15, 15, 35, 0.8), rgba(0, 0, 0, 0.6));
+            color: white;
+            border: 2px solid #9d4edd;
+            border-radius: 16px;
+            font-size: clamp(1.2rem, 6vw, 28px); /* 响应式字体大小 */
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            text-decoration: none;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            transition: all 0.3s ease;
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            touch-action: manipulation; /* 优化触摸体验 */
+        }
+
+        .install-btn i {
+            margin-right: 8px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-number {
+            animation-name: numberFadeIn !important;
+        }
+
+        .install-btn:hover, .install-btn:focus {
+            box-shadow: 0 0 20px #b76ef7, 
+                        0 0 40px rgba(183, 110, 247, 0.7),
+                        inset 0 0 15px rgba(183, 110, 247, 0.6);
+            transform: translateY(-2px) scale(1.02) rotateX(5deg);
+            border-color: #b76ef7;
+            color: #f0e6ff;
+            outline: none; /* 移除焦点轮廓 */
+        }
+
+        .btn-wrapper:hover .btn-number, .btn-wrapper:focus-within .btn-number {
+            background: radial-gradient(circle, rgba(183, 110, 247, 0.4) 0%, rgba(15, 15, 35, 0.7) 70%);
+            border-color: rgba(183, 110, 247, 0.7);
+            color: white;
+            box-shadow: 0 0 10px rgba(183, 110, 247, 0.7),
+                       inset 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .install-btn:active {
+            animation: candyEffect 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes candyEffect {
+            0% {
+                transform: scale(1.02) rotateX(5deg);
+                box-shadow: 0 0 20px #b76ef7, 
+                            0 0 40px rgba(183, 110, 247, 0.7),
+                            inset 0 0 15px rgba(183, 110, 247, 0.6);
+                border-color: #b76ef7;
+            }
+            30% {
+                transform: scale(0.95, 1.05) rotateX(0);
+                box-shadow: 0 0 10px #9d4edd, 
+                            0 0 20px rgba(157, 78, 221, 0.5),
+                            inset 0 0 20px rgba(157, 78, 221, 0.7);
+                border-color: #8a2be2;
+                color: #d8bfd8;
+            }
+            60% {
+                transform: scale(1.08, 0.95) rotateX(-3deg);
+                box-shadow: 0 0 25px #c98fff, 
+                            0 0 50px rgba(201, 143, 255, 0.8),
+                            inset 0 0 10px rgba(201, 143, 255, 0.6);
+                border-color: #c98fff;
+                color: #f8f0ff;
+            }
+            100% {
+                transform: scale(1) rotateX(0);
+                box-shadow: 0 0 15px #9d4edd, 
+                            0 0 30px rgba(157, 78, 221, 0.6),
+                            inset 0 0 10px rgba(157, 78, 221, 0.5);
+                border-color: #9d4edd;
+                color: white;
+            }
+        }
+
+        .install-btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201, 143, 255, 0.6) 0%, rgba(157, 78, 221, 0.2) 70%);
+            transform: scale(0);
+            animation: candyRipple 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            pointer-events: none;
+        }
+
+        @keyframes candyRipple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            70% {
+                transform: scale(5);
+                opacity: 0.4;
+            }
+            100% {
+                transform: scale(6);
+                opacity: 0;
+            }
+        }
+
+        .footer-decoration {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(to top, rgba(157, 78, 221, 0.1), transparent);
+            z-index: 5;
+        }
+
+        /* 提示框样式 - 移动端优化 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: clamp(8px, 3vw, 12px) clamp(16px, 6vw, 24px);
+            border-radius: 8px;
+            border: 1px solid #9d4edd;
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.5);
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.3s ease;
+            font-size: clamp(0.9rem, 3vw, 1rem); /* 响应式字体 */
+            max-width: 90%; /* 限制最大宽度 */
+            text-align: center;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* 针对小屏手机的额外优化 */
+        @media (max-width: 360px) {
+            .site-title {
+                margin: 15px 0 20px;
+            }
+            
+            .btn-wrapper {
+                margin-bottom: 15px;
+            }
+            
+            .install-btn {
+                padding-left: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="starry-sky"></div>
+    <div class="footer-decoration"></div>
+    <!-- 提示框元素 -->
+    <div class="toast">此按钮无效果</div>
+
+    <h1 class="site-title">皮瓜软件站</h1>
+    
+    <div class="button-container">
+        <!-- 按钮1 -->
+        <div class="btn-wrapper">
+            <span class="btn-number">1</span>
+            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
+        </div>
+        
+        <!-- 按钮2 -->
+        <div class="btn-wrapper">
+            <span class="btn-number">2</span>
+            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
+        </div>
+        
+        <!-- 按钮3 -->
+        <div class="btn-wrapper">
+            <span class="btn-number">3</span>
+            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
+        </div>
+        
+        <!-- 按钮4 -->
+        <div class="btn-wrapper">
+            <span class="btn-number">4</span>
+            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
+        </div>
+        
+        <!-- 按钮5 -->
+        <div class="btn-wrapper">
+            <span class="btn-number">5</span>
+            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
+        </div>
+        
+        <!-- 按钮6 -->
+        <div class="btn-wrapper">
+            <span class="btn-number">6</span>
+            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
+        </div>
+        
+        <!-- 按钮7 -->
+        <div class="btn-wrapper">
+            <span class="btn-number">7</span>
+            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
+        </div>
+        
+        <!-- 按钮8 -->
+        <div class="btn-wrapper">
+            <span class="btn-number">8</span>
+            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
+        </div>
+
+        <!-- 按钮9 -->
+        <div class="btn-wrapper">
+            <span class="btn-number">9</span>
+            <a href="https://example.com" class="install-btn"><i class="fas fa-download"></i>安装包</a>
+        </div>
+    </div>
+
+    <!-- 点击音效元素 -->
+    <audio id="clickSound" preload="auto">
+        <source src="http://share.sunjiada.cn/data/music_23739392.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // 星空背景逻辑
+        const sky = document.getElementById('starry-sky');
+        const starCount = window.innerWidth < 768 ? 100 : 200; // 移动端减少星星数量，优化性能
+        let meteorInterval;
+        const toast = document.querySelector('.toast');
+        const clickSound = document.getElementById('clickSound');
+
+        function createStar() {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            
+            // 移动端使用更小的星星
+            const sizeClass = window.innerWidth < 768 
+                ? (Math.random() > 0.8 ? 'medium' : 'small')
+                : (Math.random() > 0.7 ? 'large' : (Math.random() > 0.5 ? 'medium' : 'small'));
+            star.classList.add(sizeClass);
+
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.top = `${Math.random() * 100}vh`;
+
+            const twinkleDuration = sizeClass === 'large' ? Math.random() * 4 + 3 : 
+                                   (sizeClass === 'medium' ? Math.random() * 3 + 2 : 
+                                                             Math.random() * 2 + 1);
+            star.style.animationDuration = `${twinkleDuration}s`;
+
+            const moveDuration = Math.random() * 60 + 30;
+            star.style.animationName = 'twinkle, move';
+            star.style.animationDuration = `${twinkleDuration}s, ${moveDuration}s`;
+
+            star.style.setProperty('--scale', Math.random() * 0.5 + 0.7);
+
+            setTimeout(() => {
+                star.remove();
+            }, moveDuration * 1000);
+
+            return star;
+        }
+
+        function createMeteor() {
+            const meteor = document.createElement('div');
+            meteor.classList.add('meteor');
+            
+            meteor.style.top = `${Math.random() * 30 + 10}%`;
+            meteor.style.right = `-${Math.random() * 200 + 100}px`;
+            // 移动端流星动画稍快
+            const duration = window.innerWidth < 768 ? Math.random() * 0.8 + 0.7 : Math.random() * 1 + 1;
+            meteor.style.animation = `meteor ${duration}s linear forwards`;
+            
+            sky.appendChild(meteor);
+            
+            setTimeout(() => {
+                meteor.remove();
+            }, 2000);
+        }
+
+        function initStars() {
+            // 分批创建星星，避免移动端卡顿
+            let created = 0;
+            const batchSize = 20;
+            const interval = setInterval(() => {
+                const toCreate = Math.min(batchSize, starCount - created);
+                for (let i = 0; i < toCreate; i++) {
+                    sky.appendChild(createStar());
+                    created++;
+                }
+                if (created >= starCount) {
+                    clearInterval(interval);
+                }
+            }, 100);
+            
+            // 移动端流星出现频率降低
+            const meteorDelay = window.innerWidth < 768 ? Math.random() * 20000 + 8000 : Math.random() * 15000 + 5000;
+            scheduleMeteor(meteorDelay);
+        }
+
+        function scheduleMeteor(delay) {
+            meteorInterval = setTimeout(() => {
+                createMeteor();
+                // 动态调整下次流星出现时间
+                const nextDelay = window.innerWidth < 768 ? Math.random() * 20000 + 8000 : Math.random() * 15000 + 5000;
+                scheduleMeteor(nextDelay);
+            }, delay);
+        }
+
+        // 优化移动端点击效果
+        document.addEventListener('click', (e) => {
+            // 移动端减少点击产生的星星数量
+            const clusterSize = window.innerWidth < 768 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 5) + 3;
+            
+            if (!e.target.classList.contains('install-btn') && !e.target.classList.contains('site-title')) {
+                for (let i = 0; i < clusterSize; i++) {
+                    const star = createStar();
+                    const offsetX = (Math.random() - 0.5) * 40;
+                    const offsetY = (Math.random() - 0.5) * 40;
+                    star.style.left = `${e.clientX + offsetX}px`;
+                    star.style.top = `${e.clientY + offsetY}px`;
+                    sky.appendChild(star);
+                }
+            }
+        });
+
+        // 为按钮和序号自动应用动画
+        function setupButtonAnimations() {
+            const btnWrappers = document.querySelectorAll('.btn-wrapper');
+            
+            btnWrappers.forEach((wrapper, index) => {
+                // 移动端动画延迟稍短
+                const delay = window.innerWidth < 768 ? 0.3 + (index * 0.15) : 0.5 + (index * 0.2);
+                
+                const button = wrapper.querySelector('.install-btn');
+                const number = wrapper.querySelector('.btn-number');
+                
+                if (button) {
+                    button.style.animation = `fadeIn 1.5s ease forwards ${delay}s`;
+                }
+                
+                if (number) {
+                    number.style.animation = `numberFadeIn 1.5s ease forwards ${delay}s, numberPulse 3s ease-in-out infinite ${delay + 1.5}s`;
+                }
+            });
+        }
+
+        // 触摸事件处理，优化移动端体验
+        function setupTouchEvents() {
+            document.querySelectorAll('.install-btn').forEach(button => {
+                // 触摸开始时的效果
+                button.addEventListener('touchstart', function(e) {
+                    this.style.transform = 'translateY(-2px) scale(1.02) rotateX(5deg)';
+                    this.style.boxShadow = '0 0 20px #b76ef7, 0 0 40px rgba(183, 110, 247, 0.7), inset 0 0 15px rgba(183, 110, 247, 0.6)';
+                    this.style.borderColor = '#b76ef7';
+                });
+                
+                // 触摸结束时的效果
+                button.addEventListener('touchend', function(e) {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                    this.style.borderColor = '';
+                });
+                
+                // 触摸取消时的效果
+                button.addEventListener('touchcancel', function(e) {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                    this.style.borderColor = '';
+                });
+            });
+        }
+
+        window.addEventListener('load', () => {
+            initStars();
+            setupButtonAnimations();
+            setupTouchEvents(); // 初始化触摸事件
+            
+            // 预加载音效，提升移动端体验
+            if (clickSound) {
+                clickSound.load();
+            }
+        });
+
+        window.addEventListener('unload', () => {
+            if (meteorInterval) clearTimeout(meteorInterval);
+        });
+
+        // 按钮点击处理逻辑
+        document.querySelectorAll('.install-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const buttonText = this.textContent.trim();
+                
+                // 播放点击音效
+                playClickSound();
+                
+                if (buttonText === '安装包') {
+                    e.preventDefault();
+                    showToast('此按钮无效果');
+                    createRipples(this, e);
+                } else {
+                    createRipples(this, e);
+                }
+            });
+        });
+
+        // 播放点击音效函数
+        function playClickSound() {
+            if (!clickSound) return;
+            
+            try {
+                clickSound.currentTime = 0;
+                // 移动端确保用户交互后能播放音效
+                clickSound.play().catch(error => {
+                    console.log('音效播放失败:', error);
+                });
+            } catch (error) {
+                console.log('音效播放错误:', error);
+            }
+        }
+
+        // 创建波纹效果
+        function createRipples(button, event) {
+            // 移动端减少波纹数量，优化性能
+            const rippleCount = window.innerWidth < 768 ? 1 : 2;
+            
+            for (let i = 0; i < rippleCount; i++) {
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                
+                ripple.style.animationDelay = `${i * 0.1}s`;
+                const sizeMultiplier = 1 - (i * 0.2);
+                
+                const rect = button.getBoundingClientRect();
+                // 处理触摸事件的坐标
+                const x = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
+                const y = event.touches ? event.touches[0].clientY - rect.top : event.clientY - rect.top;
+                const size = Math.max(rect.width, rect.height) * sizeMultiplier;
+                
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                ripple.style.width = `${size}px`;
+                ripple.style.height = `${size}px`;
+                
+                button.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 800);
+            }
+        }
+
+        // 显示提示框
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+    
