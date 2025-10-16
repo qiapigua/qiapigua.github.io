@@ -2,12 +2,13 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>加载中...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0F172A">
+    <title>皮瓜软件站</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     
-    <!-- 配置Tailwind自定义颜色 -->
+    <!-- 配置Tailwind自定义颜色和工具类 -->
     <script>
         tailwind.config = {
             theme: {
@@ -40,6 +41,21 @@
                 background-size: 200% 200%;
                 animation: gradientShift 3s ease infinite;
             }
+            .btn-hover {
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            .btn-hover:hover {
+                transform: translateY(-3px) scale(1.02);
+                box-shadow: 0 0 20px rgba(157, 78, 221, 0.8),
+                            0 0 40px rgba(157, 78, 221, 0.5);
+            }
+            .text-shadow {
+                text-shadow: 0 0 10px rgba(199, 125, 255, 0.5);
+            }
+            .touch-friendly {
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            }
         }
         
         @keyframes spin {
@@ -62,6 +78,11 @@
             to { opacity: 0; transform: scale(0.9); visibility: hidden; }
         }
         
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
         @keyframes starDrift {
             0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
             25% { opacity: 1; }
@@ -71,65 +92,100 @@
         }
         
         @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
+            0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.4; }
         }
     </style>
 </head>
-<body class="bg-neon-dark min-h-screen flex items-center justify-center overflow-hidden relative">
+<body class="bg-neon-dark min-h-screen flex items-center justify-center overflow-hidden antialiased m-0 p-0">
     <!-- 动态粒子星空背景 -->
     <div id="particle-container" class="absolute inset-0 z-0"></div>
     
     <!-- 光晕背景效果 -->
-    <div class="absolute w-[600px] h-[600px] rounded-full bg-neon-purple/15 blur-[120px] -top-[300px] -left-[300px]" style="animation: pulse 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
-    <div class="absolute w-[500px] h-[500px] rounded-full bg-neon-pink/15 blur-[120px] -bottom-[250px] -right-[250px]" style="animation: pulse 9s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 2s;"></div>
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-neon-purple/15 blur-[100px] -top-[250px] -left-[250px]" style="animation: pulse 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
+    <div class="absolute w-[400px] h-[400px] rounded-full bg-neon-pink/15 blur-[100px] -bottom-[200px] -right-[200px]" style="animation: pulse 9s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 2s;"></div>
     
-    <!-- 加载动画容器 -->
-    <div id="loader" class="flex flex-col items-center justify-center relative z-10">
-        <!-- 装饰环 -->
-        <div class="absolute w-[200px] h-[200px] rounded-full border border-neon-purple/20" style="animation: spin 40s linear infinite;"></div>
-        <div class="absolute w-[160px] h-[160px] rounded-full border border-neon-pink/20" style="animation: spin 30s linear infinite reverse;"></div>
-        
-        <!-- 主加载图标 -->
-        <div class="relative w-28 h-28 mb-10" style="animation: float 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;">
-            <div class="absolute inset-0 border-4 border-neon-purple/20 rounded-full"></div>
-            <div class="absolute inset-0 border-4 border-t-neon-purple border-r-neon-pink rounded-full gradient-animate" style="animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
-            <div class="absolute inset-[10px] bg-neon-dark/80 rounded-full flex items-center justify-center glow-purple">
-                <i class="fa fa-rocket text-white text-3xl" style="animation: spin 6s linear infinite reverse;"></i>
+    <!-- 核心内容容器 -->
+    <div class="relative z-10 flex flex-col items-center justify-center w-full max-w-md px-6">
+        <!-- 初始按钮界面 -->
+        <div id="start-screen" class="flex flex-col items-center w-full animate-fadeIn">
+            <!-- 标题文本 -->
+            <h1 class="text-[clamp(1.8rem,10vw,3rem)] font-bold mb-[-10px] gradient-animate text-center text-shadow w-full" style="background: linear-gradient(90deg, #9D4EDD, #C77DFF, #7E22CE); background-clip: text; -webkit-background-clip: text; color: transparent; margin: 0; padding-top: 20px;">
+                皮瓜软件站
+            </h1>
+            
+            <!-- 按钮组 -->
+            <div class="flex flex-col gap-3 w-full max-w-xs mx-auto">
+                <!-- 第一个按钮 -->
+                <button id="start-button" class="px-6 py-5 rounded-full bg-gradient-to-r from-neon-purple to-neon-pink text-white font-medium text-lg glow-purple btn-hover flex items-center justify-center transition-all duration-300 touch-friendly">
+                    <i class="fa fa-sign-in mr-2"></i> 进入软件站
+                </button>
+                
+                <!-- 第二个按钮 -->
+                <button id="direct-link-button" class="px-6 py-5 rounded-full bg-gradient-to-r from-neon-purple to-neon-pink text-white font-medium text-lg glow-purple btn-hover flex items-center justify-center transition-all duration-300 touch-friendly">
+                    <i class="fa fa-home mr-2"></i> 皮瓜主页
+                </button>
             </div>
+            
+            <!-- 底部文本 -->
+            <p class="mt-5 text-gray-400 text-xs sm:text-sm text-center opacity-70 w-full margin: 0;">
+                安全 · 高效 · 便捷的软件服务平台
+            </p>
         </div>
         
-        <!-- 加载文本 -->
-        <div class="text-lg md:text-xl font-medium mb-6 gradient-animate" style="background: linear-gradient(90deg, #9D4EDD, #C77DFF, #7E22CE); background-clip: text; -webkit-background-clip: text; color: transparent;">
-            <span class="inline-block" style="animation: pulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;">正在进入</span>
-            <span class="inline-block ml-2" style="animation: pulse 3s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 0.5s;">梦幻空间</span>
+        <!-- 加载动画容器 -->
+        <div id="loader" class="flex flex-col items-center w-full opacity-0 pointer-events-none">
+            <!-- 装饰环 - 旋转速度加快 -->
+            <div class="absolute w-[160px] h-[160px] rounded-full border border-neon-purple/20" style="animation: spin 20s linear infinite;"></div>
+            <div class="absolute w-[120px] h-[120px] rounded-full border border-neon-pink/20" style="animation: spin 15s linear infinite reverse;"></div>
+            
+            <!-- 主加载图标 - 旋转速度加快 -->
+            <div class="relative w-[70px] h-[70px] sm:w-[90px] sm:h-[90px] mb-5 mx-auto" style="animation: float 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;">
+                <div class="absolute inset-0 border-4 border-neon-purple/20 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-t-neon-purple border-r-neon-pink rounded-full gradient-animate" style="animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
+                <div class="absolute inset-[10px] bg-neon-dark/80 backdrop-blur-sm rounded-full flex items-center justify-center glow-purple">
+                    <i class="fa fa-rocket text-white text-2xl sm:text-3xl" style="animation: spin 3s linear infinite reverse;"></i>
+                </div>
+            </div>
+            
+            <!-- 加载文本 -->
+            <div class="text-base sm:text-lg font-medium mb-4 gradient-animate text-center text-shadow w-full" style="background: linear-gradient(90deg, #9D4EDD, #C77DFF, #7E22CE); background-clip: text; -webkit-background-clip: text; color: transparent; margin: 0;">
+                <span class="inline-block" style="animation: pulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;">正在进入</span>
+                <span class="inline-block ml-2" style="animation: pulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 0.3s;">皮瓜软件站</span>
+            </div>
+            
+            <!-- 动态进度条 -->
+            <div class="w-full max-w-xs h-5 rounded-full border-2 border-neon-purple/70 overflow-hidden glow-purple mx-auto">
+                <div id="progress-bar" class="h-full opacity-70 gradient-animate w-0 transition-all duration-200 ease-out" 
+                     style="background: linear-gradient(90deg, #9D4EDD, #C77DFF, #7E22CE, #B453CD);"></div>
+            </div>
+            
+            <!-- 百分比显示 -->
+            <div id="progress-percent" class="mt-3 text-neon-pink/80 font-mono text-base sm:text-lg transition-all duration-300 text-center text-shadow margin: 0;">0%</div>
         </div>
-        
-        <!-- 动态渐变紫色半透明进度条 -->
-        <div class="w-80 md:w-96 h-5 rounded-full border-2 border-neon-purple/70 overflow-hidden glow-purple">
-            <div id="progress-bar" class="h-full opacity-70 gradient-animate w-0 transition-all duration-300 ease-out" 
-                 style="background: linear-gradient(90deg, #9D4EDD, #C77DFF, #7E22CE, #B453CD);"></div>
-        </div>
-        
-        <!-- 百分比显示 -->
-        <div id="progress-percent" class="mt-4 text-neon-pink/80 font-mono text-lg transition-all duration-300"></div>
     </div>
 
     <script>
         // 创建动态粒子星空
         function createParticles() {
             const container = document.getElementById('particle-container');
-            const particleCount = 100;
+            const isMobile = window.innerWidth < 640;
+            const particleCount = isMobile ? 80 : 150;
             
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
-                const size = Math.random() * 2.5 + 0.5;
-                const opacity = Math.random() * 0.7 + 0.3;
-                const delay = Math.random() * 6;
-                const duration = Math.random() * 15 + 15;
+                const size = Math.random() * (isMobile ? 2 : 3) + 0.3;
+                const opacity = Math.random() * 0.8 + 0.2;
+                const delay = Math.random() * 8;
+                const duration = Math.random() * 20 + 15;
                 
-                const color = Math.random() > 0.7 ? '#fff' : 'rgba(199, 125, 255, 0.9)';
+                const colors = ['#fff', 'rgba(199, 125, 255, 0.9)', 'rgba(157, 78, 221, 0.8)'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
                 
                 particle.style.cssText = `
                     position: absolute;
@@ -153,66 +209,146 @@
         // 初始化粒子星空
         createParticles();
         
-        // 进度条动画控制
-        let progress = 0;
+        // 获取DOM元素
+        const startScreen = document.getElementById('start-screen');
+        const startButton = document.getElementById('start-button');
+        const directLinkButton = document.getElementById('direct-link-button');
+        const loader = document.getElementById('loader');
         const progressBar = document.getElementById('progress-bar');
         const progressPercent = document.getElementById('progress-percent');
-        const loader = document.getElementById('loader');
         
-        // 初始状态设置
-        progressPercent.textContent = '0%';
+        // 触摸和鼠标反馈处理
+        const buttons = [startButton, directLinkButton];
+        buttons.forEach(button => {
+            // 触摸反馈
+            button.addEventListener('touchstart', () => {
+                button.style.transform = 'translateY(1px) scale(0.99)';
+            });
+            button.addEventListener('touchend', () => {
+                button.style.transform = '';
+            });
+            button.addEventListener('touchcancel', () => {
+                button.style.transform = '';
+            });
+            
+            // 鼠标反馈
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'translateY(1px) scale(0.99)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = '';
+            });
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = '';
+            });
+        });
         
-        // 进度更新函数
-        function updateProgress() {
-            let increment;
-            if (progress < 30) {
-                increment = Math.random() * 5 + 2;
-            } else if (progress < 70) {
-                increment = Math.random() * 8 + 3;
-            } else {
-                increment = Math.random() * 5 + 2;
-            }
+        // 点击第一个按钮开始加载
+        startButton.addEventListener('click', startLoading);
+        startButton.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            startLoading();
+        });
+        
+        // 点击第二个按钮直接跳转
+        directLinkButton.addEventListener('click', () => {
+            redirectToHome();
+        });
+        directLinkButton.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            redirectToHome();
+        });
+        
+        function redirectToHome() {
+            directLinkButton.classList.add('opacity-70');
+            setTimeout(() => {
+                const targetUrl = "https://qiapigua.github.io";
+                window.location.href = targetUrl;
+            }, 150);
+        }
+        
+        function startLoading() {
+            startButton.classList.add('opacity-70');
             
-            progress += increment;
-            if (progress > 100) progress = 100;
-            
-            // 应用进度
-            progressBar.style.width = `${progress}%`;
-            
-            // 平滑更新百分比显示
-            const displayPercent = Math.floor(progress);
-            if (progressPercent.textContent !== `${displayPercent}%`) {
-                progressPercent.textContent = `${displayPercent}%`;
-            }
-            
-            // 检查是否完成
-            if (progress < 100) {
-                const nextDelay = progress < 50 ? 100 : 70;
-                setTimeout(updateProgress, nextDelay);
-            } else {
+            // 加快界面切换速度
+            setTimeout(() => {
+                startScreen.style.animation = 'fadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+                
                 setTimeout(() => {
-                    loader.style.animation = 'fadeOut 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+                    startScreen.style.display = 'none';
+                    loader.style.opacity = '1';
+                    loader.style.pointerEvents = 'auto';
+                    loader.style.transition = 'opacity 0.4s ease';
+                    
+                    updateProgress();
+                }, 400);
+            }, 100);
+        }
+        
+        // 进度条动画控制 - 速度提升约50%
+        let progress = 0;
+        const progressSteps = [20, 45, 70, 90, 100]; // 减少步骤
+        let stepIndex = 0;
+        const isMobile = window.innerWidth < 640;
+        
+        function updateProgress() {
+            if (stepIndex < progressSteps.length) {
+                const target = progressSteps[stepIndex];
+                // 增加每次进度增量
+                const increment = isMobile ? Math.random() * 6 + 2 : Math.random() * 5 + 2;
+                progress = Math.min(progress + increment, target);
+                
+                progressBar.style.width = `${progress}%`;
+                
+                const displayPercent = Math.floor(progress);
+                if (progressPercent.textContent !== `${displayPercent}%`) {
+                    progressPercent.textContent = `${displayPercent}%`;
+                }
+                
+                // 减少延迟时间
+                let delay = isMobile ? 60 : 80;
+                if (progress > 70) delay = isMobile ? 80 : 100;
+                if (progress > 90) delay = isMobile ? 100 : 120;
+                
+                setTimeout(updateProgress, delay);
+                
+                if (progress >= target) {
+                    stepIndex++;
+                    if (stepIndex < progressSteps.length) {
+                        // 减少暂停时间
+                        const pauseDelay = [100, 80, 60, 40, 0][stepIndex];
+                        if (pauseDelay > 0) {
+                            setTimeout(() => {}, pauseDelay);
+                        }
+                    }
+                }
+            } else {
+                // 加快最终淡出速度
+                setTimeout(() => {
+                    loader.style.animation = 'fadeOut 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards';
                     
                     setTimeout(() => {
                         detectDeviceAndRedirect();
-                    }, 800);
-                }, 200);
+                    }, 500);
+                }, 100);
             }
         }
-        
-        // 开始进度更新
-        updateProgress();
         
         // 设备检测与跳转
         function detectDeviceAndRedirect() {
             const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
-            // 替换为您的目标URL
             const desktopUrl = "https://qiapigua.github.io/qiapigua---2/";
             const mobileUrl = "https://qiapigua.github.io/qiapigua---3/";
             
             window.location.href = isMobile ? mobileUrl : desktopUrl;
         }
+        
+        // 防止移动端双击缩放
+        document.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+        }, { passive: false });
     </script>
 </body>
 </html>
+    
