@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0F172A">
-    <title>皮瓜软件站</title>
+    <title>皮瓜加载中转站</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     
@@ -132,9 +132,9 @@
                 </button>
             </div>
             
-            <!-- 底部文本 -->
-            <p class="mt-5 text-gray-400 text-xs sm:text-sm text-center opacity-70 w-full margin: 0;">
-                安全 · 高效 · 便捷的软件服务平台
+            <!-- 底部文本 - 修改为最新更新时间 -->
+            <p class="mt-5 text-gray-400 text-xs sm:text-sm text-center opacity-70 w-full margin: 0;" id="last-update-time">
+                最新更新时间：加载中...
             </p>
         </div>
         
@@ -209,6 +209,17 @@
         // 初始化粒子星空
         createParticles();
         
+        // 设置最新更新时间
+        function setLastUpdateTime() {
+            // 这里可以替换为实际的更新时间
+            // 格式示例: 2025-10-18 15:30:00
+            const lastUpdate = "2025-10-18 15:30:00";
+            document.getElementById('last-update-time').textContent = `最新更新时间：${lastUpdate}`;
+        }
+        
+        // 页面加载完成后显示更新时间
+        window.addEventListener('load', setLastUpdateTime);
+        
         // 获取DOM元素
         const startScreen = document.getElementById('start-screen');
         const startButton = document.getElementById('start-button');
@@ -250,20 +261,26 @@
             startLoading();
         });
         
-        // 点击第二个按钮直接跳转
+        // 点击第二个按钮检测设备并跳转
         directLinkButton.addEventListener('click', () => {
-            redirectToHome();
+            detectDeviceAndRedirectHome();
         });
         directLinkButton.addEventListener('touchend', (e) => {
             e.preventDefault();
-            redirectToHome();
+            detectDeviceAndRedirectHome();
         });
         
-        function redirectToHome() {
+        // 皮瓜主页设备检测跳转
+        function detectDeviceAndRedirectHome() {
             directLinkButton.classList.add('opacity-70');
+            
+            // 这里可以根据需要修改为你的链接
+            const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const desktopHomeUrl = "https://qiapigua.github.io";  // 电脑端主页链接
+            const mobileHomeUrl = "https://image.cursorhub.org/user-upload/1760770697212-f0cf0d29-7fde-4c8f-b07a-d373c4fd1875.html";    // 手机端主页链接
+            
             setTimeout(() => {
-                const targetUrl = "https://qiapigua.github.io";
-                window.location.href = targetUrl;
+                window.location.href = isMobile ? mobileHomeUrl : desktopHomeUrl;
             }, 150);
         }
         
@@ -334,7 +351,7 @@
             }
         }
         
-        // 设备检测与跳转
+        // 软件站设备检测与跳转
         function detectDeviceAndRedirect() {
             const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
@@ -351,4 +368,3 @@
     </script>
 </body>
 </html>
-    
