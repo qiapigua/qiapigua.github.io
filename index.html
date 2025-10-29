@@ -56,28 +56,6 @@
                 touch-action: manipulation;
                 -webkit-tap-highlight-color: transparent;
             }
-            .marquee-container {
-                overflow: hidden;
-                white-space: nowrap;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                position: relative;
-            }
-            .marquee-label {
-                flex-shrink: 0;
-                margin-right: 10px; /* 减小间距，让"公告："更靠近滚动内容 */
-                min-width: 54px; /* 调整固定宽度 */
-            }
-            .marquee-wrapper {
-                flex: 1;
-                overflow: hidden;
-            }
-            .marquee-content {
-                display: inline-block;
-                animation: marquee 30s linear infinite; /* 延长到30秒，减慢滚动速度 */
-                will-change: transform;
-            }
         }
         
         @keyframes spin {
@@ -122,11 +100,6 @@
             0%, 100% { opacity: 0.8; }
             50% { opacity: 0.4; }
         }
-        
-        @keyframes marquee {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
     </style>
 </head>
 <body class="bg-neon-dark min-h-screen flex items-center justify-center overflow-hidden antialiased m-0 p-0">
@@ -146,14 +119,12 @@
                 皮瓜软件站
             </h1>
             
-            <!-- 公告区域：调整间距和滚动速度 -->
-            <div class="marquee-container my-4 w-full">
-                <span class="marquee-label text-neon-purple font-bold text-shadow">公告：</span>
-                <div class="marquee-wrapper">
-                    <div class="marquee-content text-neon-pink/90 text-sm sm:text-base font-medium text-shadow">
-                        Eurfex圣彼得堡版本上架在第九个版本
-                    </div>
-                </div>
+            <!-- 居中显示的公告区域 -->
+            <div class="flex items-center my-4 justify-center w-full">
+                <span class="text-neon-purple font-bold text-shadow mr-2">公告：</span>
+                <span class="text-neon-pink/90 text-sm sm:text-base font-medium text-shadow">
+                    Eurfex圣彼得堡版本上架了，在软件站第九个
+                </span>
             </div>
             
             <!-- 按钮组 -->
@@ -250,7 +221,7 @@
         function setLastUpdateTime() {
             // 这里可以替换为实际的更新时间
             // 格式示例: 2025-10-22 20:00:00
-            const lastUpdate = "2025-10-29 18:10:00";
+            const lastUpdate = "2025-10-29 21:00:00";
             document.getElementById('last-update-time').textContent = `最新更新时间：${lastUpdate}`;
         }
         
