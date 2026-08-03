@@ -3,376 +3,455 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0F172A">
     <title>皮瓜加载中转站</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    
-    <!-- 配置Tailwind自定义颜色和工具类 -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        neon: {
-                            purple: '#9D4EDD',
-                            pink: '#C77DFF',
-                            violet: '#7E22CE',
-                            lavender: '#B453CD',
-                            dark: '#0F172A'
-                        }
-                    }
-                }
-            }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
-    </script>
-    
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .glow-purple {
-                box-shadow: 0 0 15px rgba(157, 78, 221, 0.6),
-                            0 0 30px rgba(157, 78, 221, 0.4),
-                            0 0 45px rgba(157, 78, 221, 0.2);
-            }
-            .gradient-animate {
-                background-size: 200% 200%;
-                animation: gradientShift 3s ease infinite;
-            }
-            .btn-hover {
-                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            }
-            .btn-hover:hover {
-                transform: translateY(-3px) scale(1.02);
-                box-shadow: 0 0 20px rgba(157, 78, 221, 0.8),
-                            0 0 40px rgba(157, 78, 221, 0.5);
-            }
-            .text-shadow {
-                text-shadow: 0 0 10px rgba(199, 125, 255, 0.5);
-            }
-            .touch-friendly {
-                touch-action: manipulation;
-                -webkit-tap-highlight-color: transparent;
-            }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background:
+                radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.95), transparent 28%),
+                radial-gradient(circle at 88% 8%, rgba(245, 248, 255, 0.9), transparent 32%),
+                linear-gradient(135deg, #ffffff 0%, #f7f9ff 45%, #eef4ff 100%);
+            color: #1f2937;
+            padding-top: 100px;
+            padding-left: 24px;
+            padding-right: 24px;
+            overflow-x: hidden;
         }
-        
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+
+        .bg-glow {
+            position: fixed;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.12), transparent 45%);
+            top: -140px;
+            right: -120px;
+            z-index: -1;
+            filter: blur(18px);
+            animation: floatGlow 18s ease-in-out infinite;
         }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.85; }
+
+        .bg-glow.second {
+            width: 360px;
+            height: 360px;
+            bottom: -100px;
+            left: -80px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.10), transparent 45%);
+            animation: floatGlow 22s ease-in-out infinite reverse;
         }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(12px, 18px) scale(1.08); }
+            100% { transform: translate(0, 0) scale(1); }
         }
-        
-        @keyframes fadeOut {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(0.9); visibility: hidden; }
+
+        .title {
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 72px;
+            background: linear-gradient(135deg, #1e293b, #3b82f6, #6366f1);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 6s ease infinite;
+            position: relative;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes starDrift {
-            0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
-            25% { opacity: 1; }
-            50% { transform: translate(10px, -10px) scale(1.1); opacity: 0.8; }
-            75% { opacity: 1; }
-            100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
-        }
-        
+
         @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
+            0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        
-        @keyframes pulse-soft {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.4; }
+
+        .title::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            width: 28px;
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #3b82f6, #6366f1);
+            transform: translateX(-50%) scaleX(0);
+            animation: lineGrow 1.2s ease 0.4s forwards;
+        }
+
+        @keyframes lineGrow {
+            to { transform: translateX(-50%) scaleX(1); }
+        }
+
+        .btn-box {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+            max-width: 340px;
+        }
+
+        .jump-btn {
+            width: 100%;
+            padding: 18px 0;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb, #4f46e5);
+            background-size: 140% 140%;
+            color: white;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow:
+                0 8px 20px rgba(37, 99, 235, 0.28),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            animation: buttonPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes buttonPulse {
+            0% { box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; }
+            50% { box-shadow: 0 8px 24px rgba(37, 99, 235, 0.34), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; }
+            100% { box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; }
+        }
+
+        .jump-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+            transition: left 0.45s ease;
+        }
+
+        .jump-btn:hover::before {
+            left: 100%;
+        }
+
+        .jump-btn:active {
+            transform: scale(0.96);
+            box-shadow:
+                0 4px 12px rgba(37, 99, 235, 0.22),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+        }
+
+        .mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.58);
+            backdrop-filter: blur(18px) saturate(150%);
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.32s ease, visibility 0.32s ease;
+        }
+
+        .mask.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup {
+            width: 100%;
+            max-width: 350px;
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 255, 0.96));
+            border-radius: 24px;
+            padding: 32px;
+            position: relative;
+            box-shadow:
+                0 18px 45px rgba(15, 23, 42, 0.18),
+                0 0 0 1px rgba(255, 255, 255, 0.7) inset,
+                0 0 0 1px rgba(37, 99, 235, 0.06);
+            transform: scale(0.94) translateY(12px);
+            transition: transform 0.32s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.32s ease;
+            opacity: 0;
+        }
+
+        .mask.show .popup {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            background: rgba(249, 250, 251, 0.95);
+            cursor: pointer;
+            font-size: 18px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.22s ease;
+        }
+
+        .close-btn:hover {
+            background: #f3f4f6;
+            color: #111827;
+            transform: rotate(90deg);
+        }
+
+        .close-btn:active {
+            transform: rotate(90deg) scale(0.92);
+        }
+
+        .popup h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .notice-text {
+            font-size: 15px;
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 28px;
+        }
+
+        .popup-link-btn {
+            width: 100%;
+            padding: 16px 0;
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(135deg, #3b82f6, #2563eb, #4f46e5);
+            background-size: 140% 140%;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 6px 16px rgba(37, 99, 235, 0.26),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            transition: all 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .popup-link-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 3px 8px rgba(37, 99, 235, 0.18);
+        }
+
+        .iframe-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(22px) saturate(140%);
+            -webkit-backdrop-filter: blur(22px) saturate(140%);
+            z-index: 1000;
+            padding: 16px;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.32s ease, visibility 0.32s ease;
+        }
+
+        .iframe-mask.show {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+        }
+        .iframe-mask.hidden-view {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        .iframe-wrap {
+            width: 100%;
+            max-width: 420px;
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.99), rgba(248, 250, 255, 0.97));
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow:
+                0 20px 50px rgba(15, 23, 42, 0.22),
+                0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+            transform: scale(0.94) translateY(12px);
+            transition: transform 0.32s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.32s ease;
+            opacity: 0;
+        }
+
+        .iframe-mask.show .iframe-wrap {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .iframe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background:
+                linear-gradient(135deg, rgba(243, 244, 246, 0.95), rgba(249, 250, 251, 0.95));
+            border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+        }
+
+        .iframe-header span {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .iframe-close {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.22s ease;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.18);
+        }
+
+        .iframe-close:active {
+            transform: scale(0.94);
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.12);
+        }
+
+        iframe {
+            flex: 1;
+            border: none;
+            width: 100%;
+            background: #fff;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 72px;
+            }
+
+            .title {
+                font-size: 28px;
+                margin-bottom: 56px;
+            }
+
+            .popup {
+                padding: 24px;
+            }
+
+            .iframe-wrap {
+                height: 68vh;
+            }
         }
     </style>
 </head>
-<body class="bg-neon-dark min-h-screen flex items-center justify-center overflow-hidden antialiased m-0 p-0">
-    <!-- 动态粒子星空背景 -->
-    <div id="particle-container" class="absolute inset-0 z-0"></div>
-    
-    <!-- 光晕背景效果 -->
-    <div class="absolute w-[500px] h-[500px] rounded-full bg-neon-purple/15 blur-[100px] -top-[250px] -left-[250px]" style="animation: pulse 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
-    <div class="absolute w-[400px] h-[400px] rounded-full bg-neon-pink/15 blur-[100px] -bottom-[200px] -right-[200px]" style="animation: pulse 9s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 2s;"></div>
-    
-    <!-- 核心内容容器 -->
-    <div class="relative z-10 flex flex-col items-center justify-center w-full max-w-md px-6">
-        <!-- 初始按钮界面 -->
-        <div id="start-screen" class="flex flex-col items-center w-full animate-fadeIn">
-            <!-- 标题文本 -->
-            <h1 class="text-[clamp(1.8rem,10vw,3rem)] font-bold mb-[-10px] gradient-animate text-center text-shadow w-full" style="background: linear-gradient(90deg, #9D4EDD, #C77DFF, #7E22CE); background-clip: text; -webkit-background-clip: text; color: transparent; margin: 0; padding-top: 20px;">
-                皮瓜软件站
-            </h1>
-            
-            <!-- 居中显示的公告区域 -->
-            <div class="flex items-center my-4 justify-center w-full">
-                <span class="text-neon-purple font-bold text-shadow mr-2">公告：</span>
-                <span class="text-neon-pink/90 text-sm sm:text-base font-medium text-shadow">
-                    巴黎2026自带连网人物上架了，在皮瓜软件站第6个
-                </span>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow second"></div>
+
+    <div class="title">皮瓜加载中转站</div>
+
+    <div class="btn-box">
+        <button class="jump-btn" onclick="location.href='https://qiapigua.github.io/qiapigua---2/'">进入皮瓜软件站</button>
+        <button class="jump-btn" onclick="location.href='https://v.kuaishou.com/JaP0DZjR'">查看皮瓜主页</button>
+    </div>
+
+    <div class="mask" id="mask">
+        <div class="popup" id="popup">
+            <button class="close-btn" id="close">×</button>
+            <h3>公告</h3>
+            <div class="notice-text">
+                皮瓜制作最新自带连网人物版本
+                26幻想节自带联网人物版本
             </div>
-            
-            <!-- 按钮组 -->
-            <div class="flex flex-col gap-3 w-full max-w-xs mx-auto">
-                <!-- 第一个按钮 -->
-                <button id="start-button" class="px-6 py-5 rounded-full bg-gradient-to-r from-neon-purple to-neon-pink text-white font-medium text-lg glow-purple btn-hover flex items-center justify-center transition-all duration-300 touch-friendly">
-                    <i class="fa fa-sign-in mr-2"></i> 进入软件站
-                </button>
-                
-                <!-- 第二个按钮 -->
-                <button id="direct-link-button" class="px-6 py-5 rounded-full bg-gradient-to-r from-neon-purple to-neon-pink text-white font-medium text-lg glow-purple btn-hover flex items-center justify-center transition-all duration-300 touch-friendly">
-                    <i class="fa fa-home mr-2"></i> 皮瓜主页
-                </button>
-            </div>
-            
-            <!-- 底部文本 - 修改为最新更新时间 -->
-            <p class="mt-5 text-gray-400 text-xs sm:text-sm text-center opacity-70 w-full margin: 0;" id="last-update-time">
-                最新更新时间：加载中...
-            </p>
+            <button class="popup-link-btn" onclick="openIframePage('https://easylink.cc/kgdajh')">直接获取</button>
         </div>
-        
-        <!-- 加载动画容器 -->
-        <div id="loader" class="flex flex-col items-center w-full opacity-0 pointer-events-none">
-            <!-- 装饰环 - 旋转速度加快 -->
-            <div class="absolute w-[160px] h-[160px] rounded-full border border-neon-purple/20" style="animation: spin 20s linear infinite;"></div>
-            <div class="absolute w-[120px] h-[120px] rounded-full border border-neon-pink/20" style="animation: spin 15s linear infinite reverse;"></div>
-            
-            <!-- 主加载图标 - 旋转速度加快 -->
-            <div class="relative w-[70px] h-[70px] sm:w-[90px] sm:h-[90px] mb-5 mx-auto" style="animation: float 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;">
-                <div class="absolute inset-0 border-4 border-neon-purple/20 rounded-full"></div>
-                <div class="absolute inset-0 border-4 border-t-neon-purple border-r-neon-pink rounded-full gradient-animate" style="animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
-                <div class="absolute inset-[10px] bg-neon-dark/80 backdrop-blur-sm rounded-full flex items-center justify-center glow-purple">
-                    <i class="fa fa-rocket text-white text-2xl sm:text-3xl" style="animation: spin 3s linear infinite reverse;"></i>
-                </div>
+    </div>
+
+    <div class="iframe-mask" id="iframeMask">
+        <div class="iframe-wrap">
+            <div class="iframe-header">
+                <span>网页预览</span>
+                <button class="iframe-close" id="iframeClose">关闭窗口</button>
             </div>
-            
-            <!-- 加载文本 -->
-            <div class="text-base sm:text-lg font-medium mb-4 gradient-animate text-center text-shadow w-full" style="background: linear-gradient(90deg, #9D4EDD, #C77DFF, #7E22CE); background-clip: text; -webkit-background-clip: text; color: transparent; margin: 0;">
-                <span class="inline-block" style="animation: pulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;">正在进入</span>
-                <span class="inline-block ml-2" style="animation: pulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; animation-delay: 0.3s;">皮瓜软件站</span>
-            </div>
-            
-            <!-- 动态进度条 -->
-            <div class="w-full max-w-xs h-5 rounded-full border-2 border-neon-purple/70 overflow-hidden glow-purple mx-auto">
-                <div id="progress-bar" class="h-full opacity-70 gradient-animate w-0 transition-all duration-200 ease-out" 
-                     style="background: linear-gradient(90deg, #9D4EDD, #C77DFF, #7E22CE, #B453CD);"></div>
-            </div>
-            
-            <!-- 百分比显示 -->
-            <div id="progress-percent" class="mt-3 text-neon-pink/80 font-mono text-base sm:text-lg transition-all duration-300 text-center text-shadow margin: 0;">0%</div>
+            <iframe id="webIframe"></iframe>
         </div>
     </div>
 
     <script>
-        // 创建动态粒子星空
-        function createParticles() {
-            const container = document.getElementById('particle-container');
-            const isMobile = window.innerWidth < 640;
-            const particleCount = isMobile ? 80 : 150;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                const size = Math.random() * (isMobile ? 2 : 3) + 0.3;
-                const opacity = Math.random() * 0.8 + 0.2;
-                const delay = Math.random() * 8;
-                const duration = Math.random() * 20 + 15;
-                
-                const colors = ['#fff', 'rgba(199, 125, 255, 0.9)', 'rgba(157, 78, 221, 0.8)'];
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                
-                particle.style.cssText = `
-                    position: absolute;
-                    background: ${color};
-                    width: ${size}px;
-                    height: ${size}px;
-                    border-radius: 50%;
-                    left: ${Math.random() * 100}%;
-                    top: ${Math.random() * 100}%;
-                    opacity: ${opacity};
-                    animation: starDrift ${duration}s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                    animation-delay: ${delay}s;
-                    z-index: 0;
-                    pointer-events: none;
-                `;
-                
-                container.appendChild(particle);
-            }
-        }
-        
-        // 初始化粒子星空
-        createParticles();
-        
-        // 设置最新更新时间
-        function setLastUpdateTime() {
-            // 这里可以替换为实际的更新时间
-            // 格式示例: 2026-6-30 13:00:00
-            const lastUpdate = "2026-7-20 21:30:00";
-            document.getElementById('last-update-time').textContent = `最新更新时间：${lastUpdate}`;
-        }
-        
-        // 页面加载完成后显示更新时间
-        window.addEventListener('load', setLastUpdateTime);
-        
-        // 获取DOM元素
-        const startScreen = document.getElementById('start-screen');
-        const startButton = document.getElementById('start-button');
-        const directLinkButton = document.getElementById('direct-link-button');
-        const loader = document.getElementById('loader');
-        const progressBar = document.getElementById('progress-bar');
-        const progressPercent = document.getElementById('progress-percent');
-        
-        // 触摸和鼠标反馈处理
-        const buttons = [startButton, directLinkButton];
-        buttons.forEach(button => {
-            // 触摸反馈
-            button.addEventListener('touchstart', () => {
-                button.style.transform = 'translateY(1px) scale(0.99)';
-            });
-            button.addEventListener('touchend', () => {
-                button.style.transform = '';
-            });
-            button.addEventListener('touchcancel', () => {
-                button.style.transform = '';
-            });
-            
-            // 鼠标反馈
-            button.addEventListener('mousedown', () => {
-                button.style.transform = 'translateY(1px) scale(0.99)';
-            });
-            button.addEventListener('mouseup', () => {
-                button.style.transform = '';
-            });
-            button.addEventListener('mouseleave', () => {
-                button.style.transform = '';
-            });
-        });
-        
-        // 点击第一个按钮开始加载
-        startButton.addEventListener('click', startLoading);
-        startButton.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            startLoading();
-        });
-        
-        // 点击第二个按钮检测设备并跳转
-        directLinkButton.addEventListener('click', () => {
-            detectDeviceAndRedirectHome();
-        });
-        directLinkButton.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            detectDeviceAndRedirectHome();
-        });
-        
-        // 皮瓜主页设备检测跳转
-        function detectDeviceAndRedirectHome() {
-            directLinkButton.classList.add('opacity-70');
-            
-            // 这里可以根据需要修改为你的链接
-            const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const desktopHomeUrl = "https://qiapigua.github.io";  // 电脑端主页链接
-            const mobileHomeUrl = "https://image.cursorhub.org/user-upload/1761398170068-c18b60f6-6cd0-4d40-b9dd-de34efb9f78a.html";    // 手机端主页链接
-            
+        const mask = document.getElementById('mask');
+        const closeBtn = document.getElementById('close');
+        const iframeMask = document.getElementById('iframeMask');
+        const webIframe = document.getElementById('webIframe');
+        const iframeClose = document.getElementById('iframeClose');
+
+        window.onload = function () {
             setTimeout(() => {
-                window.location.href = isMobile ? mobileHomeUrl : desktopHomeUrl;
-            }, 150);
-        }
-        
-        function startLoading() {
-            startButton.classList.add('opacity-70');
-            
-            // 加快界面切换速度
-            setTimeout(() => {
-                startScreen.style.animation = 'fadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards';
-                
-                setTimeout(() => {
-                    startScreen.style.display = 'none';
-                    loader.style.opacity = '1';
-                    loader.style.pointerEvents = 'auto';
-                    loader.style.transition = 'opacity 0.4s ease';
-                    
-                    updateProgress();
-                }, 400);
-            }, 100);
-        }
-        
-        // 进度条动画控制 - 速度提升约50%
-        let progress = 0;
-        const progressSteps = [20, 45, 70, 90, 100]; // 减少步骤
-        let stepIndex = 0;
-        const isMobile = window.innerWidth < 640;
-        
-        function updateProgress() {
-            if (stepIndex < progressSteps.length) {
-                const target = progressSteps[stepIndex];
-                // 增加每次进度增量
-                const increment = isMobile ? Math.random() * 6 + 2 : Math.random() * 5 + 2;
-                progress = Math.min(progress + increment, target);
-                
-                progressBar.style.width = `${progress}%`;
-                
-                const displayPercent = Math.floor(progress);
-                if (progressPercent.textContent !== `${displayPercent}%`) {
-                    progressPercent.textContent = `${displayPercent}%`;
-                }
-                
-                // 减少延迟时间
-                let delay = isMobile ? 60 : 80;
-                if (progress > 70) delay = isMobile ? 80 : 100;
-                if (progress > 90) delay = isMobile ? 100 : 120;
-                
-                setTimeout(updateProgress, delay);
-                
-                if (progress >= target) {
-                    stepIndex++;
-                    if (stepIndex < progressSteps.length) {
-                        // 减少暂停时间
-                        const pauseDelay = [100, 80, 60, 40, 0][stepIndex];
-                        if (pauseDelay > 0) {
-                            setTimeout(() => {}, pauseDelay);
-                        }
-                    }
-                }
-            } else {
-                // 加快最终淡出速度
-                setTimeout(() => {
-                    loader.style.animation = 'fadeOut 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards';
-                    
-                    setTimeout(() => {
-                        detectDeviceAndRedirect();
-                    }, 500);
-                }, 100);
+                mask.classList.add('show');
+            }, 60);
+        };
+
+        closeBtn.onclick = function () {
+            mask.classList.remove('show');
+        };
+
+        mask.onclick = function (e) {
+            if (e.target === mask) {
+                mask.classList.remove('show');
             }
+        };
+
+        function openIframePage(url) {
+            webIframe.src = url;
+            iframeMask.classList.add('show');
+
+            setTimeout(() => {
+                iframeMask.classList.add('hidden-view');
+            }, 1);
+
+            setTimeout(() => {
+                iframeMask.classList.remove('show','hidden-view');
+                webIframe.src = "";
+            }, 3000);
         }
-        
-        // 软件站设备检测与跳转
-        function detectDeviceAndRedirect() {
-            const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            const desktopUrl = "https://qiapigua.github.io/qiapigua---2/";
-            const mobileUrl = "https://qiapigua.github.io/qiapigua---3/";
-            
-            window.location.href = isMobile ? mobileUrl : desktopUrl;
-        }
-        
-        // 防止移动端双击缩放
-        document.addEventListener('dblclick', (e) => {
-            e.preventDefault();
-        }, { passive: false });
+
+        iframeClose.onclick = function () {
+            iframeMask.classList.remove('show','hidden-view');
+            webIframe.src = "";
+        };
+
+        iframeMask.onclick = function (e) {
+            if (e.target === iframeMask) {
+                iframeMask.classList.remove('show','hidden-view');
+                webIframe.src = "";
+            }
+        };
     </script>
 </body>
 </html>
