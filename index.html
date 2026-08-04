@@ -5,6 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>皮瓜加载中转站</title>
     <style>
+        :root {
+            --body-bg-1: #ffffff;
+            --body-bg-2: #f7f9ff;
+            --body-bg-3: #eef4ff;
+            --text-main: #1f2937;
+            --popup-bg: rgba(255, 255, 255, 0.98);
+            --popup-bg-2: rgba(248, 250, 255, 0.96);
+            --iframe-header-bg: rgba(243, 244, 246, 0.95);
+            --border-color: rgba(229, 231, 235, 0.6);
+            --notice-color: #4b5563;
+            --close-btn-bg: rgba(249, 250, 251, 0.95);
+            --close-btn-text: #6b7280;
+            --iframe-bg: #fff;
+            --radial-glow-1: rgba(255, 255, 255, 0.95);
+            --radial-glow-2: rgba(245, 248, 255, 0.9);
+            --float-glow-blue: rgba(59, 130, 246, 0.12);
+            --float-glow-indigo: rgba(99, 102, 241, 0.10);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --body-bg-1: #0f172a;
+                --body-bg-2: #131c31;
+                --body-bg-3: #182238;
+                --text-main: #e2e8f0;
+                --popup-bg: rgba(30, 41, 59, 0.98);
+                --popup-bg-2: rgba(26, 37, 56, 0.96);
+                --iframe-header-bg: rgba(30, 41, 59, 0.95);
+                --border-color: rgba(71, 85, 105, 0.5);
+                --notice-color: #a1aebf;
+                --close-btn-bg: rgba(51, 65, 85, 0.95);
+                --close-btn-text: #cbd5e1;
+                --iframe-bg: #162136;
+                --radial-glow-1: rgba(59, 130, 246, 0.08);
+                --radial-glow-2: rgba(99, 102, 241, 0.06);
+                --float-glow-blue: rgba(59, 130, 246, 0.08);
+                --float-glow-indigo: rgba(99, 102, 241, 0.06);
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,10 +58,10 @@
             flex-direction: column;
             align-items: center;
             background:
-                radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.95), transparent 28%),
-                radial-gradient(circle at 88% 8%, rgba(245, 248, 255, 0.9), transparent 32%),
-                linear-gradient(135deg, #ffffff 0%, #f7f9ff 45%, #eef4ff 100%);
-            color: #1f2937;
+                radial-gradient(circle at 12% 12%, var(--radial-glow-1), transparent 28%),
+                radial-gradient(circle at 88% 8%, var(--radial-glow-2), transparent 32%),
+                linear-gradient(135deg, var(--body-bg-1) 0%, var(--body-bg-2) 45%, var(--body-bg-3) 100%);
+            color: var(--text-main);
             padding-top: 100px;
             padding-left: 24px;
             padding-right: 24px;
@@ -33,7 +73,7 @@
             width: 420px;
             height: 420px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.12), transparent 45%);
+            background: radial-gradient(circle, var(--float-glow-blue), transparent 45%);
             top: -140px;
             right: -120px;
             z-index: -1;
@@ -46,7 +86,7 @@
             height: 360px;
             bottom: -100px;
             left: -80px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.10), transparent 45%);
+            background: radial-gradient(circle, var(--float-glow-indigo), transparent 45%);
             animation: floatGlow 22s ease-in-out infinite reverse;
         }
 
@@ -177,7 +217,7 @@
             width: 100%;
             max-width: 350px;
             background:
-                linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 255, 0.96));
+                linear-gradient(135deg, var(--popup-bg), var(--popup-bg-2));
             border-radius: 24px;
             padding: 32px;
             position: relative;
@@ -202,11 +242,11 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            border: 1px solid rgba(229, 231, 235, 0.8);
-            background: rgba(249, 250, 251, 0.95);
+            border: 1px solid var(--border-color);
+            background: var(--close-btn-bg);
             cursor: pointer;
             font-size: 18px;
-            color: #6b7280;
+            color: var(--close-btn-text);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -214,8 +254,8 @@
         }
 
         .close-btn:hover {
-            background: #f3f4f6;
-            color: #111827;
+            filter: brightness(1.15);
+            color: var(--text-main);
             transform: rotate(90deg);
         }
 
@@ -227,12 +267,12 @@
             font-size: 24px;
             margin-bottom: 20px;
             font-weight: 700;
-            color: #111827;
+            color: var(--text-main);
         }
 
         .notice-text {
             font-size: 15px;
-            color: #4b5563;
+            color: var(--notice-color);
             line-height: 1.8;
             margin-bottom: 28px;
         }
@@ -296,7 +336,7 @@
             display: flex;
             flex-direction: column;
             background:
-                linear-gradient(135deg, rgba(255, 255, 255, 0.99), rgba(248, 250, 255, 0.97));
+                linear-gradient(135deg, var(--popup-bg), var(--popup-bg-2));
             border-radius: 22px;
             overflow: hidden;
             box-shadow:
@@ -317,14 +357,13 @@
             justify-content: space-between;
             align-items: center;
             padding: 16px 20px;
-            background:
-                linear-gradient(135deg, rgba(243, 244, 246, 0.95), rgba(249, 250, 251, 0.95));
-            border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+            background: var(--iframe-header-bg);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .iframe-header span {
             font-weight: 600;
-            color: #1f2937;
+            color: var(--text-main);
         }
 
         .iframe-close {
@@ -348,7 +387,7 @@
             flex: 1;
             border: none;
             width: 100%;
-            background: #fff;
+            background: var(--iframe-bg);
         }
 
         @media (max-width: 480px) {
